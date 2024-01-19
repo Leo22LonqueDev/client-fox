@@ -1,7 +1,7 @@
-export default function Home() {
+export default function Login() {
     return (
         <>
-            <h1>Duas telas funcionando, ta bom ou quer mais</h1>
+            <h1>Hello Pissotinho, funciona</h1>
         </>
     )
 
