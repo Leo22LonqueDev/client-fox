@@ -3,7 +3,7 @@
 import { Box, Button, Container, Paper, TextField } from "@mui/material";
 import logoFox from "@/imgs/logoFox.svg"
 import Image from "next/image";
-import { orange } from "@mui/material/colors";
+import {  grey, orange } from "@mui/material/colors";
 
 export default function Home() {
     return (
@@ -30,7 +30,7 @@ export default function Home() {
                         <br />
                         <TextField type="password" label="Senha" variant="standard" sx={{ width: '300px' }} />
                         <br />
-                        <Button type='submit' variant='contained'>Login</Button>
+                        <Button type='submit' variant='contained'>Login </Button>
                         <br />
                     </Box>
                 </Box>
