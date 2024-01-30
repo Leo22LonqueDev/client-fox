@@ -2,7 +2,7 @@
 
 import { Box, Container, Paper, Typography, } from "@mui/material";
 
-export default function Home() {
+const Home = () => {
     return (
         <>
             <Container maxWidth='xl' sx={{ borderRadius: '15px', height: "98vh" }}>
@@ -31,3 +31,5 @@ export default function Home() {
         </>
     )
 }
+
+export default Home
