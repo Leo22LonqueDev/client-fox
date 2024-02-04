@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import App from './App';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { render } from 'react-dom';
 
 const theme = createTheme({
   typography: {
@@ -11,7 +11,7 @@ const theme = createTheme({
   },
 });
 
-ReactDOM.render(
+render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
       <App />
