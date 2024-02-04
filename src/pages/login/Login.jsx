@@ -4,6 +4,7 @@ import { orange } from "@mui/material/colors"
 const Login = () => {
     return (
         <>
+        <h1>Funciona</h1>
             <Container maxWidth sx={{ bgcolor: orange[600] }}>
                 <Box>
                     <TextField type='email' label='E-mail' />
