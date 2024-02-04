@@ -1,11 +1,10 @@
 import { Box, Button, Container, TextField } from "@mui/material"
-import { orange } from "@mui/material/colors"
+import { blueGrey } from "@mui/material/colors"
 
-const Login = () => {
+const Home = () => {
     return (
         <>
-        <h1>Funciona</h1>
-            <Container maxWidth sx={{ bgcolor: orange[600] }}>
+            <Container maxWidth sx={{ bgcolor: blueGrey[400] }}>
                 <Box>
                     <TextField type='email' label='E-mail' />
                     <TextField type='password' label='Senha' />
@@ -16,4 +15,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Home
