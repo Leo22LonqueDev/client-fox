@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField } from "@mui/material"
+import { Box, Container, Typography } from "@mui/material"
 import { blueGrey } from "@mui/material/colors"
 
 const Home = () => {
@@ -6,9 +6,9 @@ const Home = () => {
         <>
             <Container maxWidth sx={{ bgcolor: blueGrey[400] }}>
                 <Box>
-                    <TextField type='email' label='E-mail' />
-                    <TextField type='password' label='Senha' />
-                    <Button type='submit'>LOGIN</Button>
+                    <Typography>
+                        Funciona
+                    </Typography>
                 </Box>
             </Container>
         </>
