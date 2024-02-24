@@ -1,18 +1,18 @@
-import { Box, Container, Typography } from "@mui/material"
-import { blueGrey } from "@mui/material/colors"
+import { Box, Container, Paper, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 
 const Home = () => {
     return (
         <>
-            <SidebarSee />
-            <Container maxWidth sx={{ bgcolor: blueGrey[400] }}>
-                <Box>
-                    <Typography>
-                        Funciona
-                    </Typography>
-                </Box>
-            </Container>
+            <SidebarSee>
+                <Container maxWidth sx={{ textAlign: 'center' }} component={Paper} elevation={7}>
+                    <Box>
+                        <Typography>
+                            Bem-Vindo!
+                        </Typography>
+                    </Box>
+                </Container>
+            </SidebarSee>
         </>
     )
 }
