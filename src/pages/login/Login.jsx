@@ -9,16 +9,17 @@ const Login = () => {
     const [senha, setSenha] = useState('')
 
     const handleSubmit = async (e) => {
-        e.preventDefault
+
     }
 
     return (
         <>
             <Container maxWidth sx={{ bgcolor: orange[600], height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Box maxWidth={400} maxHeight={500} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: orange[50], padding: '10px', borderRadius: '15px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: orange[50], padding: '40px', borderRadius: '15px', height: '400px' }}>
                     <img src={logo} alt='LogoFox' />
-                    <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} variant='standard' />
-                    <TextField type='password' label='Senha' onChange={(e) => { setSenha(e.target.value) }} variant='standard' />
+                    <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} value={email} variant='standard' sx={{ width: '300px' }} />
+                    <br />
+                    <TextField type='password' label='Senha' onChange={(e) => { setSenha(e.target.value) }} value={senha} variant='standard' sx={{ width: '300px' }} />
                     <br />
                     <Button type='submit' variant='contained' onClick={handleSubmit} >LOGIN</Button>
                 </Box>
