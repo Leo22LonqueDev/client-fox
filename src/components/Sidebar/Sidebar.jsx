@@ -9,6 +9,7 @@ import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import HailOutlinedIcon from '@mui/icons-material/HailOutlined';
 import TimeToLeaveOutlinedIcon from '@mui/icons-material/TimeToLeaveOutlined';
+import { orange } from "@mui/material/colors";
 
 const SidebarSee = ({ children }) => {
 
@@ -25,7 +26,7 @@ const SidebarSee = ({ children }) => {
     return (
         <Box sx={{ display: 'flex', width: '100%' }} >
             <Sidebar collapsed={isOpen}>
-                <Box display={'flex'} justifyContent={isOpen ? 'center' : 'end'} alignItems={'center'} height={'50px'} bgcolor={'#E57A1C'}>
+                <Box display={'flex'} justifyContent={isOpen ? 'center' : 'end'} alignItems={'center'} height={'50px'} bgcolor={orange[700]}>
                     <IconButton color="inherit" onClick={toggleMenu}>
                         {isOpen ? <MenuIcon /> : <KeyboardArrowLeftIcon />}
                     </IconButton>
@@ -36,12 +37,12 @@ const SidebarSee = ({ children }) => {
                         <MenuItem icon={<TimeToLeaveOutlinedIcon />} component={<Link to={'/carros'} />} >Carros</MenuItem>
                     </SubMenu>
                     <SubMenu icon={<HailOutlinedIcon />} label='Usuários' >
-                        <MenuItem icon={<HomeOutlinedIcon />} component={<Link to={'/professores'} />} >Professores</MenuItem>
+                        <MenuItem component={<Link to={'/usuarios'} />} >Usuários</MenuItem>
                     </SubMenu>
                 </Menu>
             </Sidebar>
             <Box width={'100%'} >
-                <Box width={'100%'} height={'50px'} bgcolor={'#E57A1C'} display={'flex'} justifyContent={'flex-end'}>
+                <Box width={'100%'} height={'50px'} bgcolor={orange[700]} display={'flex'} justifyContent={'flex-end'}>
                     <ProfileMenu />
                 </Box>
                 <Box overflow={'auto'} style={{ height: 'calc(100vh - 50px)' }}>
