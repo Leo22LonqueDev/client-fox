@@ -1,19 +1,51 @@
-import { Box, Button, Container, Paper, Table, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import { Search } from "@mui/icons-material"
+import { useState } from "react"
 
 const Usuarios = () => {
+
+    const [open, setOpen] = useState(false)
+    const [openCriarUsuario, setOpenCriarUsuario] = useState(false)
+    const [nome, setNome] = useState('')
+    const [email, setEmail] = useState('')
+    const [dataAdmissao, setDataAdmissao] = useState('')
+    const [setor, setSetor] = useState('')
+    const [severity, setSeverity] = useState('')
+    const [message, setMessage] = useState('')
+
+    const handleClose = () => {
+        setOpenCriarUsuario(false)
+    }
+
+    const handleChangeModal = async () => {
+        setOpenCriarUsuario(true)
+    }
+
+    const handleCriarUsuario = async (e) => {
+        try {
+            if ((nome === '') || (email === '') || (dataAdmissao === '') || (setor === '')) {
+                setOpen(true)
+                setSeverity('warning')
+                setMessage('Dados faltando, favor inserir todos os campos!')
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <SidebarSee>
-                <Container maxWidth>
+                <Container >
                     <Box
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             mt: 2,
+                            mb: 10
                         }}
                     >
                         <Typography
@@ -39,10 +71,35 @@ const Usuarios = () => {
                         >
                             Usuários
                         </Typography>
+                        <Button variant='contained' color='info' onClick={handleChangeModal} >Criar Usuários</Button>
                     </Box>
-                    <Box sx={{ mt: 2 }}>
-                        <Button variant='contained' color='info' >Criar Usuários</Button>
-                    </Box>
+                    <Dialog
+                        open={openCriarUsuario}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Informe os dados do novo Usuario"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <TextField type='text' label='Nome' onChange={(e) => { setNome(e.target.value) }} sx={{ mt: 2 }} />
+                                <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} sx={{ mt: 2 }} />
+                                <TextField type='date' focused label='Data de Admissão' onChange={(e) => { setDataAdmissao(e.target.value) }} sx={{ mt: 2 }} />
+                                <TextField type='text' label='Setor' onChange={(e) => { setSetor(e.target.value) }} sx={{ mt: 2 }} />
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color='error'>Fechar</Button>
+                            <Button onClick={handleCriarUsuario} color='success' autoFocus>Criar</Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Snackbar open={open} autoHideDuration={5000} onClose={() => {setOpen(false)}}>
+                        <Alert severity={severity} variant='filled'>
+                            {message}
+                        </Alert>
+                    </Snackbar>
                     <Box sx={{ mt: 2 }}>
                         <TextField size="small" type='text' variant='outlined' label='Buscar'
                             InputProps={{
@@ -55,7 +112,7 @@ const Usuarios = () => {
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <TableContainer component={Paper} elevation={3} sx={{ bgcolor: orange[700], borderRadius: '10px' }}>
-                            <Table aria-label="simple table" >
+                            <Table aria-label="simple table" size='small' >
                                 <TableHead>
                                     <TableRow>
                                         <TableCell></TableCell>
