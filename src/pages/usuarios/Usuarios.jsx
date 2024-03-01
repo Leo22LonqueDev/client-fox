@@ -1,8 +1,10 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import { Search } from "@mui/icons-material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import axios from "axios"
 
 const Usuarios = () => {
 
@@ -12,8 +14,11 @@ const Usuarios = () => {
     const [email, setEmail] = useState('')
     const [dataAdmissao, setDataAdmissao] = useState('')
     const [setor, setSetor] = useState('')
+    const [telefone, setTelefone] = useState('')
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+
+    const [users, setUsers] = useState([])
 
     const handleClose = () => {
         setOpenCriarUsuario(false)
@@ -23,17 +28,46 @@ const Usuarios = () => {
         setOpenCriarUsuario(true)
     }
 
-    const handleCriarUsuario = async (e) => {
+    const handleCriarUsuario = async () => {
         try {
             if ((nome === '') || (email === '') || (dataAdmissao === '') || (setor === '')) {
                 setOpen(true)
                 setSeverity('warning')
                 setMessage('Dados faltando, favor inserir todos os campos!')
+                return
             }
+            const criarUsuario = await axios.post(`${process.env.REACT_APP_BACKEND}/users`, {
+                nome: nome,
+                email: email,
+                dataAdmissao: dataAdmissao,
+                setor: setor,
+                telefone: telefone,
+            })
+            console.log(criarUsuario);
+            setOpen(true)
+            setSeverity('success')
+            setMessage('Usuario criado com sucesso!')
+            return
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const fetchData = async () => {
+        try {
+            const result = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
+            setUsers(result.data.users)
+            console.log(result.data.users);
+            return
         } catch (error) {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     return (
         <>
@@ -88,6 +122,7 @@ const Usuarios = () => {
                                 <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} sx={{ mt: 2 }} />
                                 <TextField type='date' focused label='Data de Admissão' onChange={(e) => { setDataAdmissao(e.target.value) }} sx={{ mt: 2 }} />
                                 <TextField type='text' label='Setor' onChange={(e) => { setSetor(e.target.value) }} sx={{ mt: 2 }} />
+                                <TextField type='text' label='Telefone' onChange={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }} />
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -95,7 +130,7 @@ const Usuarios = () => {
                             <Button onClick={handleCriarUsuario} color='success' autoFocus>Criar</Button>
                         </DialogActions>
                     </Dialog>
-                    <Snackbar open={open} autoHideDuration={5000} onClose={() => {setOpen(false)}}>
+                    <Snackbar open={open} autoHideDuration={5000} onClose={() => { setOpen(false) }}>
                         <Alert severity={severity} variant='filled'>
                             {message}
                         </Alert>
@@ -111,9 +146,9 @@ const Usuarios = () => {
                             fullWidth />
                     </Box>
                     <Box sx={{ mt: 2 }}>
-                        <TableContainer component={Paper} elevation={3} sx={{ bgcolor: orange[700], borderRadius: '10px' }}>
+                        <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
                             <Table aria-label="simple table" size='small' >
-                                <TableHead>
+                                <TableHead sx={{ bgcolor: orange[700] }}>
                                     <TableRow>
                                         <TableCell></TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Nome</TableCell>
@@ -121,14 +156,30 @@ const Usuarios = () => {
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Setor</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Telefone</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Ativo</TableCell>
-                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
+                                        <TableCell align='center' sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
                                     </TableRow>
                                 </TableHead>
+                                <TableBody>
+                                    {users.map((item) => (
+                                        <TableRow
+                                            key={item._id}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell></TableCell>
+                                            <TableCell>{item.nome}</TableCell>
+                                            <TableCell>{item.email}</TableCell>
+                                            <TableCell>{item.setor}</TableCell>
+                                            <TableCell>{item.telefone}</TableCell>
+                                            <TableCell>{item.ativo}</TableCell>
+                                            <TableCell align='center'>{<Button color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
                             </Table>
                         </TableContainer>
                     </Box>
                 </Container>
-            </SidebarSee>
+            </SidebarSee >
         </>
     )
 }

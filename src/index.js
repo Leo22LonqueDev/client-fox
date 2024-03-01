@@ -3,15 +3,16 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { render } from 'react-dom';
+import ReactDOM from "react-dom/client";
 
 const theme = createTheme({
   typography: {
     fontFamily: 'Open Sans, sans-serif',
   },
 });
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-render(
+root.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
       <App />
