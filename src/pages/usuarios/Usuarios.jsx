@@ -19,6 +19,7 @@ const Usuarios = () => {
     const [message, setMessage] = useState('')
 
     const [users, setUsers] = useState([])
+    const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpenCriarUsuario(false)
@@ -44,9 +45,15 @@ const Usuarios = () => {
                 telefone: telefone,
             })
             console.log(criarUsuario);
-            setOpen(true)
             setSeverity('success')
             setMessage('Usuario criado com sucesso!')
+            setNome('')
+            setDataAdmissao('')
+            setEmail('')
+            setSetor('')
+            setTelefone('')
+            setFlushHook(true)
+            setOpenCriarUsuario(false)
             return
         } catch (error) {
             console.log(error);
@@ -67,7 +74,8 @@ const Usuarios = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <>
