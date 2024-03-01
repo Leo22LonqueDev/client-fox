@@ -5,7 +5,6 @@ import { Search } from "@mui/icons-material"
 import { useEffect, useState } from "react"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import axios from "axios"
-import { getUsers } from "../../_services/user.service"
 
 const Usuarios = () => {
 
@@ -35,8 +34,9 @@ const Usuarios = () => {
                 setOpen(true)
                 setSeverity('warning')
                 setMessage('Dados faltando, favor inserir todos os campos!')
+                return
             }
-            const criarUsuario = await axios.post(process.env.REACT_APP_BACK + '/usuarios/users', {
+            const criarUsuario = await axios.post(`${process.env.REACT_APP_BACKEND}/users`, {
                 nome: nome,
                 email: email,
                 dataAdmissao: dataAdmissao,
@@ -56,8 +56,9 @@ const Usuarios = () => {
 
     const fetchData = async () => {
         try {
-            const result = await getUsers()
-            setUsers(result)
+            const result = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
+            setUsers(result.data.users)
+            console.log(result.data.users);
             return
         } catch (error) {
             console.log(error);
@@ -145,9 +146,9 @@ const Usuarios = () => {
                             fullWidth />
                     </Box>
                     <Box sx={{ mt: 2 }}>
-                        <TableContainer component={Paper} elevation={3} sx={{ bgcolor: orange[700], borderRadius: '10px' }}>
+                        <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
                             <Table aria-label="simple table" size='small' >
-                                <TableHead>
+                                <TableHead sx={{ bgcolor: orange[700] }}>
                                     <TableRow>
                                         <TableCell></TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Nome</TableCell>
@@ -155,29 +156,30 @@ const Usuarios = () => {
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Setor</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Telefone</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Ativo</TableCell>
-                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
+                                        <TableCell align='center' sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {/* {users.map((item) => (
+                                    {users.map((item) => (
                                         <TableRow
                                             key={item._id}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
+                                            <TableCell></TableCell>
                                             <TableCell>{item.nome}</TableCell>
                                             <TableCell>{item.email}</TableCell>
                                             <TableCell>{item.setor}</TableCell>
                                             <TableCell>{item.telefone}</TableCell>
                                             <TableCell>{item.ativo}</TableCell>
-                                            <TableCell>{<EditOutlinedIcon />}</TableCell>
+                                            <TableCell align='center'>{<Button color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
                                         </TableRow>
-                                    ))} */}
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Box>
                 </Container>
-            </SidebarSee>
+            </SidebarSee >
         </>
     )
 }
