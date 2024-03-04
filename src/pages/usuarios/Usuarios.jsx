@@ -31,7 +31,7 @@ const Usuarios = () => {
 
     const handleCriarUsuario = async () => {
         try {
-            if ((nome === '') || (email === '') || (dataAdmissao === '') || (setor === '')) {
+            if ((nome === '') || (email === '') || (dataAdmissao === '') || (setor === '') || (telefone === '')) {
                 setOpen(true)
                 setSeverity('warning')
                 setMessage('Dados faltando, favor inserir todos os campos!')
