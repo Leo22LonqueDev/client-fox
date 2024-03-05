@@ -17,12 +17,14 @@ const Usuarios = () => {
     const [telefone, setTelefone] = useState('')
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+    const [openDetails, setOpenDetails] = useState(false)
 
     const [users, setUsers] = useState([])
     const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpenCriarUsuario(false)
+        setOpenDetails(false)
     }
 
     const handleChangeModal = async () => {
@@ -70,6 +72,10 @@ const Usuarios = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handleOpenDetails = async () => {
+        setOpenDetails(true)
     }
 
     useEffect(() => {
@@ -179,12 +185,81 @@ const Usuarios = () => {
                                             <TableCell>{item.setor}</TableCell>
                                             <TableCell>{item.telefone}</TableCell>
                                             <TableCell>{item.ativo}</TableCell>
-                                            <TableCell align='center'>{<Button color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
+                                            <TableCell align='center'>{<Button onClick={handleOpenDetails} color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <Dialog
+                            fullWidth
+                            open={openDetails}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                            sx={{display: "flex", justifyContent: "space-around"}}
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Detalhes"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    <Box sx={{display: "flex", justifyContent: "space-around", mr:2}}>
+
+                                    <TextField label='Nome' margin="normal" type="text"
+                                        InputProps={{
+                                            style: { mr:2,
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                    <TextField label='Email' margin="normal" type="text"
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                    <TextField label='Setor' margin="normal" type="text"
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                    <TextField label='Telefone' margin="normal" type="text"
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                    <TextField label='Ativo' margin="normal" type="text"
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                    <TextField label='CPF' margin="normal" type="text"
+                                        InputProps={{
+                                            style: {
+                                                borderRadius: '10px',
+                                            },
+                                            
+                                        }} />
+                                        </Box>
+
+
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color="error" >Fechar</Button>
+                                <Button onClick={handleClose} color="success" autoFocus>
+                                    Salvar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </Box>
                 </Container>
             </SidebarSee >
