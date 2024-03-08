@@ -132,11 +132,39 @@ const Usuarios = () => {
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description" sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <TextField type='text' label='Nome' onChange={(e) => { setNome(e.target.value) }} sx={{ mt: 2 }} />
-                                <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} sx={{ mt: 2 }} />
-                                <TextField type='date' focused label='Data de Admissão' onChange={(e) => { setDataAdmissao(e.target.value) }} sx={{ mt: 2 }} />
-                                <TextField type='text' label='Setor' onChange={(e) => { setSetor(e.target.value) }} sx={{ mt: 2 }} />
-                                <TextField type='text' label='Telefone' onChange={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }} />
+                                <TextField type='text' label='Nome' onChange={(e) => { setNome(e.target.value) }} sx={{ mt: 2 }}
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }} />
+                                <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} sx={{ mt: 2 }}
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }} />
+                                <TextField type='date' label='Data de Admissão' onChange={(e) => { setDataAdmissao(e.target.value) }} sx={{ mt: 2 }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }} />
+                                <TextField type='text' label='Setor' onChange={(e) => { setSetor(e.target.value) }} sx={{ mt: 2 }}
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }} />
+                                <TextField type='text' label='Telefone' onChange={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }}
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: '10px',
+                                        }
+                                    }} />
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -197,58 +225,59 @@ const Usuarios = () => {
                             onClose={handleClose}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
-                            sx={{display: "flex", justifyContent: "space-around"}}
+                            sx={{ display: "flex", justifyContent: "space-around" }}
                         >
                             <DialogTitle id="alert-dialog-title">
                                 {"Detalhes"}
                             </DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                    <Box sx={{display: "flex", justifyContent: "space-around", mr:2}}>
+                                    <Box sx={{ display: "flex", justifyContent: "space-around", mr: 2 }}>
 
-                                    <TextField label='Nome' margin="normal" type="text"
-                                        InputProps={{
-                                            style: { mr:2,
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                    <TextField label='Email' margin="normal" type="text"
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                    <TextField label='Setor' margin="normal" type="text"
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                    <TextField label='Telefone' margin="normal" type="text"
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                    <TextField label='Ativo' margin="normal" type="text"
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                    <TextField label='CPF' margin="normal" type="text"
-                                        InputProps={{
-                                            style: {
-                                                borderRadius: '10px',
-                                            },
-                                            
-                                        }} />
-                                        </Box>
+                                        <TextField label='Nome' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    mr: 2,
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                        <TextField label='Email' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                        <TextField label='Setor' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                        <TextField label='Telefone' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                        <TextField label='Ativo' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                        <TextField label='CPF' margin="normal" type="text"
+                                            InputProps={{
+                                                style: {
+                                                    borderRadius: '10px',
+                                                },
+
+                                            }} />
+                                    </Box>
 
 
                                 </DialogContentText>
