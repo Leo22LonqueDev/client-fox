@@ -1,10 +1,13 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Search } from "@mui/icons-material"
+import { orange } from "@mui/material/colors"
+import axios from "axios"
 
 const Veiculos = () => {
 
-    const [adicionarVeiculo, setAdicionarVeiculo] = useState(false)
+    const [openAdicionarVeiculo, setOpenAdicionarVeiculo] = useState(false)
     const [modelo, setModelo] = useState("")
     const [placa, setPlaca] = useState("")
     const [anoDeFabricacao, setAnoDeFabricacao] = useState("")
@@ -13,41 +16,65 @@ const Veiculos = () => {
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+    
+    const [flushHook, setFlushHook] = useState(false)
+
+    
+    const handleClickAddVeiculo = async () => {
+        setOpenAdicionarVeiculo(true)
+    }
+    
+    const handleClose = async () => {
+        setOpenAdicionarVeiculo(false)
+    }
 
     const handleCriarVeiculo = async () => {
         try {
             if ((modelo === '') || (placa === '') || (anoDeFabricacao === '') || (cor === '') || (marca === '')) {
-            setOpen(true)
-            setSeverity('warning')
-            setMessage('Dados faltando, favor inserir todos os campos!')
+                setOpen(true)
+                setSeverity('warning')
+                setMessage('Dados faltando, favor inserir todos os campos!')
+                return
+            }
+            const criarVeiculo = await axios.post(`${process.env.REACT_APP_BACKEND}/veiculo`, {
+                modelo: modelo,
+                placa: placa,
+                anoDeFabricacao: anoDeFabricacao,
+                cor: cor,
+                marca: marca,
+            })
+            console.log(criarVeiculo);
+            setSeverity('success')
+            setMessage('Veículo adicionado com sucesso!')
+            setModelo('')
+            setPlaca('')
+            setAnoDeFabricacao('')
+            setCor('')
+            setMarca('')
+            setFlushHook(true)
+            setOpenAdicionarVeiculo(false)
             return
-        }
-            
         } catch (error) {
             console.log(error)
         }
     }
 
-    const handleClickAddVeiculo = async () => {
-        setAdicionarVeiculo(true)
-    }
-
-    const handleClose = async () => {
-        setAdicionarVeiculo(false)
-    }
-
-
+    useEffect(() => {
+        // fetchData()
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <>
             <SidebarSee>
-                <Container maxWidth>
+                <Container >
                     <Box
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             mt: 2,
+                            mb: 10
                         }}
                     >
                         <Typography
@@ -76,11 +103,11 @@ const Veiculos = () => {
                         <Button type='button' variant='contained' onClick={handleClickAddVeiculo} >Adicionar Veículo</Button>
                     </Box>
                     <Dialog
-                        open={adicionarVeiculo}
+                        open={openAdicionarVeiculo}
                         onClose={handleClose}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
-                        
+
                     >
                         <DialogTitle id="alert-dialog-title">
                             {"Informe o Veículo"}
@@ -99,7 +126,7 @@ const Veiculos = () => {
                                         }
                                     }} />
                                 <TextField type='number' label='Ano de Fabricação' onBlur={(e) => { setAnoDeFabricacao(e.target.value) }} sx={{ mt: 2 }}
-                                    
+
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
@@ -129,8 +156,35 @@ const Veiculos = () => {
                             {message}
                         </Alert>
                     </Snackbar>
-                    <Box>
+                    <Box sx={{ mt: 2 }}>
+                        <TextField size="small" type='text' variant='outlined' label='Buscar'
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <Search sx={{ mr: 1 }} />
+                            }}
+                            fullWidth />
+                    </Box>
+                    <Box sx={{ mt: 2 }}>
+                        <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
+                            <Table aria-label="simple table" size='small' >
+                                <TableHead sx={{ bgcolor: orange[700] }}>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Modelo</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Placa</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Ano de Fabricação</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Cor</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Marca</TableCell>
+                                        <TableCell align='center' sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
 
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Box>
                 </Container>
             </SidebarSee>

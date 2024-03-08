@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
-import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import HailOutlinedIcon from '@mui/icons-material/HailOutlined';
 import TimeToLeaveOutlinedIcon from '@mui/icons-material/TimeToLeaveOutlined';
 import { orange } from "@mui/material/colors";
