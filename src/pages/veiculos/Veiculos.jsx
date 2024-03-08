@@ -36,7 +36,7 @@ const Veiculos = () => {
                 setMessage('Dados faltando, favor inserir todos os campos!')
                 return
             }
-            const criarVeiculo = await axios.post(`${process.env.REACT_APP_BACKEND}/veiculo`, {
+            const criarVeiculo = await axios.post(`${process.env.REACT_APP_BACKEND}/veiculos/createVeiculos`, {
                 modelo: modelo,
                 placa: placa,
                 anoDeFabricacao: anoDeFabricacao,
