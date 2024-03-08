@@ -1,17 +1,32 @@
-import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { useState } from "react"
 
 const Veiculos = () => {
 
     const [adicionarVeiculo, setAdicionarVeiculo] = useState(false)
-    const [modelo, setModelo] = useState(false)
-    const [placa, setPlaca] = useState(false)
-    const [anoDeFabricacao, setAnoDeFabricacao] = useState(false)
-    const [cor, setCor] = useState(false)
-    const [marca, setMarca] = useState(false)
+    const [modelo, setModelo] = useState("")
+    const [placa, setPlaca] = useState("")
+    const [anoDeFabricacao, setAnoDeFabricacao] = useState("")
+    const [cor, setCor] = useState("")
+    const [marca, setMarca] = useState("")
+    const [open, setOpen] = useState(false)
+    const [severity, setSeverity] = useState('')
+    const [message, setMessage] = useState('')
 
-    console.log(modelo);
+    const handleCriarVeiculo = async () => {
+        try {
+            if ((modelo === '') || (placa === '') || (anoDeFabricacao === '') || (cor === '') || (marca === '')) {
+            setOpen(true)
+            setSeverity('warning')
+            setMessage('Dados faltando, favor inserir todos os campos!')
+            return
+        }
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleClickAddVeiculo = async () => {
         setAdicionarVeiculo(true)
@@ -65,6 +80,7 @@ const Veiculos = () => {
                         onClose={handleClose}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
+                        
                     >
                         <DialogTitle id="alert-dialog-title">
                             {"Informe o Veículo"}
@@ -76,28 +92,26 @@ const Veiculos = () => {
                                         borderRadius: '10px',
                                     }
                                 }} />
-                                <TextField type='email' label='Placa' sx={{ mt: 2 }}
+                                <TextField type='email' label='Placa' onBlur={(e) => { setPlaca(e.target.value) }} sx={{ mt: 2 }}
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='date' label='Ano de Fabricação' sx={{ mt: 2 }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
+                                <TextField type='number' label='Ano de Fabricação' onBlur={(e) => { setAnoDeFabricacao(e.target.value) }} sx={{ mt: 2 }}
+                                    
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='text' label='Cor' sx={{ mt: 2 }}
+                                <TextField type='text' label='Cor' onBlur={(e) => { setCor(e.target.value) }} sx={{ mt: 2 }}
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='text' label='Marca' sx={{ mt: 2 }}
+                                <TextField type='text' label='Marca' onBlur={(e) => { setMarca(e.target.value) }} sx={{ mt: 2 }}
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
@@ -107,9 +121,14 @@ const Veiculos = () => {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose} color='error'>Fechar</Button>
-                            <Button onClick={handleClose} color='success' autoFocus>Criar</Button>
+                            <Button onClick={handleCriarVeiculo} color='success' autoFocus>Criar</Button>
                         </DialogActions>
                     </Dialog>
+                    <Snackbar open={open} autoHideDuration={5000} onClose={() => { setOpen(false) }}>
+                        <Alert severity={severity} variant='filled'>
+                            {message}
+                        </Alert>
+                    </Snackbar>
                     <Box>
 
                     </Box>

@@ -33,9 +33,7 @@ const SidebarSee = ({ children }) => {
                 </Box>
                 <Menu iconShape='round'>
                     <MenuItem icon={<HomeOutlinedIcon />} component={<Link to={'/'} />} >Home</MenuItem>
-                    <SubMenu icon={<AttachMoneyOutlinedIcon />} label='Financeiro' >
                         <MenuItem icon={<TimeToLeaveOutlinedIcon />} component={<Link to={'/veiculos'} />} >Veículos</MenuItem>
-                    </SubMenu>
                     <SubMenu icon={<HailOutlinedIcon />} label='Usuários' >
                         <MenuItem component={<Link to={'/usuarios'} />} >Usuários</MenuItem>
                     </SubMenu>
