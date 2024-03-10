@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Search } from "@mui/icons-material"
 import { orange } from "@mui/material/colors"
 import axios from "axios"
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const Veiculos = () => {
 
@@ -16,14 +17,14 @@ const Veiculos = () => {
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
-    
+    const [carro, setCarro] = useState([])
     const [flushHook, setFlushHook] = useState(false)
 
-    
+
     const handleClickAddVeiculo = async () => {
         setOpenAdicionarVeiculo(true)
     }
-    
+
     const handleClose = async () => {
         setOpenAdicionarVeiculo(false)
     }
@@ -59,8 +60,14 @@ const Veiculos = () => {
         }
     }
 
+    const fetchData = async () => {
+        const result = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/getVeiculos`)
+        setCarro(result.data)
+        console.log(result)
+    }
+
     useEffect(() => {
-        // fetchData()
+         fetchData()
         setFlushHook(false)
     }, [flushHook])
 
@@ -181,7 +188,20 @@ const Veiculos = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-
+                                {carro.map((item) => (
+                                        <TableRow
+                                            key={item._id}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell></TableCell>
+                                            <TableCell>{item.modelo}</TableCell>
+                                            <TableCell>{item.placa}</TableCell>
+                                            <TableCell>{item.anoDeFabricacao}</TableCell>
+                                            <TableCell>{item.cor}</TableCell>
+                                            <TableCell>{item.marca}</TableCell>
+                                            <TableCell align='center'>{<Button color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
