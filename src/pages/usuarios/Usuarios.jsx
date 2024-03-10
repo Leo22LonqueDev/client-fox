@@ -3,28 +3,29 @@ import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import { Search } from "@mui/icons-material"
 import { useEffect, useState } from "react"
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+// import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import axios from "axios"
+import EditarUsuarios from "./Modais/EditarUsuarios"
 
 const Usuarios = () => {
 
-    const [open, setOpen] = useState(false)
     const [openCriarUsuario, setOpenCriarUsuario] = useState(false)
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [dataAdmissao, setDataAdmissao] = useState('')
     const [setor, setSetor] = useState('')
     const [telefone, setTelefone] = useState('')
+    const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
-    const [openDetails, setOpenDetails] = useState(false)
+    // const [openDetails, setOpenDetails] = useState(false)
 
     const [users, setUsers] = useState([])
     const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpenCriarUsuario(false)
-        setOpenDetails(false)
+        // setOpenDetails(false)
     }
 
     const handleChangeModal = async () => {
@@ -60,7 +61,6 @@ const Usuarios = () => {
         } catch (error) {
             console.log(error);
         }
-
     }
 
     const fetchData = async () => {
@@ -74,9 +74,9 @@ const Usuarios = () => {
         }
     }
 
-    const handleOpenDetails = async () => {
-        setOpenDetails(true)
-    }
+    // const handleOpenDetails = async () => {
+    //     setOpenDetails(true)
+    // }
 
     useEffect(() => {
         fetchData()
@@ -213,13 +213,25 @@ const Usuarios = () => {
                                             <TableCell>{item.setor}</TableCell>
                                             <TableCell>{item.telefone}</TableCell>
                                             <TableCell>{item.ativo}</TableCell>
-                                            <TableCell align='center'>{<Button onClick={handleOpenDetails} color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
+                                            <TableCell align='center'>{
+                                                <EditarUsuarios
+                                                    id={item._id}
+                                                    nomeUsuario={item.nome}
+                                                    emailUsuario={item.email}
+                                                    setorUsuario={item.setor}
+                                                    telefoneUsuario={item.telefone}
+                                                    ativoUsuario={item.ativo}
+                                                    dataAdmissaoUsuario={item.dataAdmissao}
+                                                    setFlushHook={setFlushHook}
+                                                />
+                                                // <Button onClick={handleOpenDetails} color='inherit'><EditOutlinedIcon /></Button>
+                                            }</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <Dialog
+                        {/* <Dialog
                             fullWidth
                             open={openDetails}
                             onClose={handleClose}
@@ -232,50 +244,49 @@ const Usuarios = () => {
                             </DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                    <Box sx={{ display: "flex", justifyContent: "space-around", mr: 2 }}>
-
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                         <TextField label='Nome' margin="normal" type="text"
+                                            sx={{ mr: 2 }}
                                             InputProps={{
                                                 style: {
-                                                    mr: 2,
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
                                         <TextField label='Email' margin="normal" type="text"
                                             InputProps={{
                                                 style: {
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
+                                    </Box>
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                         <TextField label='Setor' margin="normal" type="text"
+                                            sx={{ mr: 2 }}
                                             InputProps={{
                                                 style: {
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
                                         <TextField label='Telefone' margin="normal" type="text"
                                             InputProps={{
                                                 style: {
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
+                                    </Box>
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                         <TextField label='Ativo' margin="normal" type="text"
+                                            sx={{ mr: 2 }}
                                             InputProps={{
                                                 style: {
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
                                         <TextField label='CPF' margin="normal" type="text"
                                             InputProps={{
                                                 style: {
                                                     borderRadius: '10px',
                                                 },
-
                                             }} />
                                     </Box>
 
@@ -288,7 +299,7 @@ const Usuarios = () => {
                                     Salvar
                                 </Button>
                             </DialogActions>
-                        </Dialog>
+                        </Dialog> */}
                     </Box>
                 </Container>
             </SidebarSee >
