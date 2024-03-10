@@ -4,7 +4,9 @@ import { useEffect, useState } from "react"
 import { Search } from "@mui/icons-material"
 import { orange } from "@mui/material/colors"
 import axios from "axios"
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+// import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import EditarVeiculos from "./modais/EditarVeiculos"
+
 
 const Veiculos = () => {
 
@@ -19,6 +21,7 @@ const Veiculos = () => {
     const [message, setMessage] = useState('')
     const [carro, setCarro] = useState([])
     const [flushHook, setFlushHook] = useState(false)
+    const [filtrar, setFiltrar] = useState([])
 
 
     const handleClickAddVeiculo = async () => {
@@ -28,7 +31,17 @@ const Veiculos = () => {
     const handleClose = async () => {
         setOpenAdicionarVeiculo(false)
     }
+    const handleFilter = async (event) => {
+        try {
+            event.preventDefault()
+            const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/filter?modelo=${modelo}`, {})
+            console.log(filter.data.filter)
+            setCarro(filter.data)
+        } catch (error) {
+            console.log(error)
 
+        }
+    }
     const handleCriarVeiculo = async () => {
         try {
             if ((modelo === '') || (placa === '') || (anoDeFabricacao === '') || (cor === '') || (marca === '')) {
@@ -67,7 +80,7 @@ const Veiculos = () => {
     }
 
     useEffect(() => {
-         fetchData()
+        fetchData()
         setFlushHook(false)
     }, [flushHook])
 
@@ -164,14 +177,19 @@ const Veiculos = () => {
                         </Alert>
                     </Snackbar>
                     <Box sx={{ mt: 2 }}>
-                        <TextField size="small" type='text' variant='outlined' label='Buscar'
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px',
-                                },
-                                startAdornment: <Search sx={{ mr: 1 }} />
-                            }}
-                            fullWidth />
+                        <form action="">
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => { setModelo(e.target.value) }}
+                                InputProps={{
+                                    style: {
+                                        borderRadius: '10px',
+                                    },
+                                    startAdornment: <Search sx={{ mr: 1 }} />
+                                }}
+                                fullWidth />
+                            <Button onClick={handleFilter} type="submit" variant="contained">
+                                filtrar
+                            </Button>
+                        </form>
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
@@ -188,7 +206,7 @@ const Veiculos = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {carro.map((item) => (
+                                    {carro.map((item) => (
                                         <TableRow
                                             key={item._id}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -199,7 +217,17 @@ const Veiculos = () => {
                                             <TableCell>{item.anoDeFabricacao}</TableCell>
                                             <TableCell>{item.cor}</TableCell>
                                             <TableCell>{item.marca}</TableCell>
-                                            <TableCell align='center'>{<Button color='inherit'><EditOutlinedIcon /></Button>}</TableCell>
+                                            <TableCell align='center'>{
+                                                <EditarVeiculos
+                                                    id={item._id}
+                                                    modeloCarro={item.modelo}
+                                                    placaCarro={item.placa}
+                                                    anoDeFabricacaoCarro={item.anoDeFabricacao}
+                                                    corCarro={item.cor}
+                                                    marcaCarro={item.marca}
+                                                    setFlushHook={setFlushHook} />
+
+                                            }</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
