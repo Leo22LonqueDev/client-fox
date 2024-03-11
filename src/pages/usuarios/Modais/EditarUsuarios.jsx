@@ -14,7 +14,7 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
     const [email, setEmail] = useState(emailUsuario)
     const [setor, setSetor] = useState(setorUsuario)
     const [telefone, setTelefone] = useState(telefoneUsuario)
-    const [ativo, setAtivo] = useState(ativoUsuario)
+    // const [ativo, setAtivo] = useState(ativoUsuario)
     const [dataAdmissao, setDataAdmissao] = useState(dataAdmissaoUsuario)
     const [cpf, setCpf] = useState('')
 
@@ -43,6 +43,7 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
                 cpf,
                 telefone,
             })
+            console.log(update);
             setOpen(true)
             setSeverity('success')
             setMessage('Dados atualizados com sucesso!')

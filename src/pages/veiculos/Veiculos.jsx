@@ -1,10 +1,9 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { useEffect, useState } from "react"
 import { Search } from "@mui/icons-material"
 import { orange } from "@mui/material/colors"
 import axios from "axios"
-// import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditarVeiculos from "./modais/EditarVeiculos"
 
 
@@ -21,7 +20,6 @@ const Veiculos = () => {
     const [message, setMessage] = useState('')
     const [carro, setCarro] = useState([])
     const [flushHook, setFlushHook] = useState(false)
-    const [filtrar, setFiltrar] = useState([])
 
 
     const handleClickAddVeiculo = async () => {
@@ -31,17 +29,7 @@ const Veiculos = () => {
     const handleClose = async () => {
         setOpenAdicionarVeiculo(false)
     }
-    const handleFilter = async (event) => {
-        try {
-            event.preventDefault()
-            const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/filter?modelo=${modelo}`, {})
-            console.log(filter.data.filter)
-            setCarro(filter.data)
-        } catch (error) {
-            console.log(error)
 
-        }
-    }
     const handleCriarVeiculo = async () => {
         try {
             if ((modelo === '') || (placa === '') || (anoDeFabricacao === '') || (cor === '') || (marca === '')) {
@@ -77,6 +65,19 @@ const Veiculos = () => {
         const result = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/getVeiculos`)
         setCarro(result.data)
         console.log(result)
+    }
+
+    const handleFilter = async (event) => {
+        try {
+            event.preventDefault()
+            if (modelo.length > 2) {
+                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/filter?modelo=${modelo}`, {})
+                console.log(filter.data)
+                setCarro(filter.data.filter)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     useEffect(() => {
@@ -120,7 +121,7 @@ const Veiculos = () => {
                         >
                             Veículos
                         </Typography>
-                        <Button type='button' variant='contained' onClick={handleClickAddVeiculo} >Adicionar Veículo</Button>
+                        <Button type='button' variant='contained' color='info' onClick={handleClickAddVeiculo} >Adicionar Veículo</Button>
                     </Box>
                     <Dialog
                         open={openAdicionarVeiculo}
@@ -183,12 +184,9 @@ const Veiculos = () => {
                                     style: {
                                         borderRadius: '10px',
                                     },
-                                    startAdornment: <Search sx={{ mr: 1 }} />
+                                    startAdornment: <IconButton onClick={handleFilter} type="submit" size='small' ><Search /></IconButton>
                                 }}
                                 fullWidth />
-                            <Button onClick={handleFilter} type="submit" variant="contained">
-                                filtrar
-                            </Button>
                         </form>
                     </Box>
                     <Box sx={{ mt: 2 }}>

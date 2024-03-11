@@ -1,9 +1,8 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import { Search } from "@mui/icons-material"
 import { useEffect, useState } from "react"
-// import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import axios from "axios"
 import EditarUsuarios from "./Modais/EditarUsuarios"
 
@@ -18,14 +17,12 @@ const Usuarios = () => {
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
-    // const [openDetails, setOpenDetails] = useState(false)
 
     const [users, setUsers] = useState([])
     const [flushHook, setFlushHook] = useState(false)
 
     const handleClose = () => {
         setOpenCriarUsuario(false)
-        // setOpenDetails(false)
     }
 
     const handleChangeModal = async () => {
@@ -74,9 +71,18 @@ const Usuarios = () => {
         }
     }
 
-    // const handleOpenDetails = async () => {
-    //     setOpenDetails(true)
-    // }
+    const handleFilter = async (event) => {
+        try {
+            event.preventDefault()
+            if (nome.length > 2) {
+                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/filter?nome=${nome}`, {})
+                console.log(filter.data)
+                setUsers(filter.data.filter)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
         fetchData()
@@ -178,14 +184,16 @@ const Usuarios = () => {
                         </Alert>
                     </Snackbar>
                     <Box sx={{ mt: 2 }}>
-                        <TextField size="small" type='text' variant='outlined' label='Buscar'
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px',
-                                },
-                                startAdornment: <Search sx={{ mr: 1 }} />
-                            }}
-                            fullWidth />
+                        <form action="">
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => {setNome(e.target.value)}}
+                                InputProps={{
+                                    style: {
+                                        borderRadius: '10px',
+                                    },
+                                    startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                                }}
+                                fullWidth />
+                        </form>
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
@@ -224,82 +232,12 @@ const Usuarios = () => {
                                                     dataAdmissaoUsuario={item.dataAdmissao}
                                                     setFlushHook={setFlushHook}
                                                 />
-                                                // <Button onClick={handleOpenDetails} color='inherit'><EditOutlinedIcon /></Button>
                                             }</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        {/* <Dialog
-                            fullWidth
-                            open={openDetails}
-                            onClose={handleClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                            sx={{ display: "flex", justifyContent: "space-around" }}
-                        >
-                            <DialogTitle id="alert-dialog-title">
-                                {"Detalhes"}
-                            </DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                        <TextField label='Nome' margin="normal" type="text"
-                                            sx={{ mr: 2 }}
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                        <TextField label='Email' margin="normal" type="text"
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                    </Box>
-                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                        <TextField label='Setor' margin="normal" type="text"
-                                            sx={{ mr: 2 }}
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                        <TextField label='Telefone' margin="normal" type="text"
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                    </Box>
-                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                        <TextField label='Ativo' margin="normal" type="text"
-                                            sx={{ mr: 2 }}
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                        <TextField label='CPF' margin="normal" type="text"
-                                            InputProps={{
-                                                style: {
-                                                    borderRadius: '10px',
-                                                },
-                                            }} />
-                                    </Box>
-
-
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose} color="error" >Fechar</Button>
-                                <Button onClick={handleClose} color="success" autoFocus>
-                                    Salvar
-                                </Button>
-                            </DialogActions>
-                        </Dialog> */}
                     </Box>
                 </Container>
             </SidebarSee >

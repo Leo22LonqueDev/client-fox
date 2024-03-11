@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const EditarVeiculos = ({ id, modeloCarro, placaCarro, anoDeFabricacaoCarro, corCarro, marcaCarro, setFlushHook, }) => {
+
     const [modelo, setModelo] = useState(modeloCarro)
     const [placa, setPlaca] = useState(placaCarro)
     const [anoDeFabricacao, setAnoDeFabricacao] = useState(anoDeFabricacaoCarro)
@@ -28,11 +29,11 @@ const EditarVeiculos = ({ id, modeloCarro, placaCarro, anoDeFabricacaoCarro, cor
                 setMessage("Este campo não pode ficar vazio, por favor insira os dados.")
                 return
             }
-            const update = await axios.put(`${process.env.REACT_APP_BACKEND}/veiculos/`,{
+            const update = await axios.put(`${process.env.REACT_APP_BACKEND}/veiculos/`, {
                 id, modelo, placa, anoDeFabricacao, cor, marca
-                
+
             })
-            
+            console.log(update);
             setOpen(true)
             setSeverity("success")
             setMessage("Dados atualizados com sucesso.")
