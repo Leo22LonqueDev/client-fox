@@ -9,6 +9,9 @@ import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import HailOutlinedIcon from '@mui/icons-material/HailOutlined';
 import TimeToLeaveOutlinedIcon from '@mui/icons-material/TimeToLeaveOutlined';
 import { orange } from "@mui/material/colors";
+import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
+import ChecklistRtlOutlinedIcon from '@mui/icons-material/ChecklistRtlOutlined';
+import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 
 const SidebarSee = ({ children }) => {
 
@@ -32,9 +35,12 @@ const SidebarSee = ({ children }) => {
                 </Box>
                 <Menu iconShape='round'>
                     <MenuItem icon={<HomeOutlinedIcon />} component={<Link to={'/'} />} >Home</MenuItem>
+                    <SubMenu icon={<ContactsOutlinedIcon />} label='Cadastro' >
                         <MenuItem icon={<TimeToLeaveOutlinedIcon />} component={<Link to={'/veiculos'} />} >Veículos</MenuItem>
-                    <SubMenu icon={<HailOutlinedIcon />} label='Usuários' >
-                        <MenuItem component={<Link to={'/usuarios'} />} >Usuários</MenuItem>
+                        <MenuItem icon={<HailOutlinedIcon />} component={<Link to={'/usuarios'} />} >Usuários</MenuItem>
+                    </SubMenu>
+                    <SubMenu icon={<ChecklistRtlOutlinedIcon />} label='Planilhas' >
+                        <MenuItem icon={<AttachMoneyOutlinedIcon />} component={<Link to={'/financeiro'} />} >Financeiro</MenuItem>
                     </SubMenu>
                 </Menu>
             </Sidebar>
