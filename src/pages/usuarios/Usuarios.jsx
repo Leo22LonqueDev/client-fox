@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
-import { orange } from "@mui/material/colors"
+import { green, orange, red } from "@mui/material/colors"
 import { Search } from "@mui/icons-material"
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -17,6 +17,7 @@ const Usuarios = () => {
     const [open, setOpen] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+    // const [ativo, setAtivo] = useState('')
 
     const [users, setUsers] = useState([])
     const [flushHook, setFlushHook] = useState(false)
@@ -205,7 +206,7 @@ const Usuarios = () => {
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>E-mail</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Setor</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Telefone</TableCell>
-                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Ativo</TableCell>
+                                        <TableCell  align='center' sx={{ color: 'white', fontSize: '15px' }}>Ativo</TableCell>
                                         <TableCell align='center' sx={{ color: 'white', fontSize: '15px' }}>Detalhes</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -220,7 +221,7 @@ const Usuarios = () => {
                                             <TableCell>{item.email}</TableCell>
                                             <TableCell>{item.setor}</TableCell>
                                             <TableCell>{item.telefone}</TableCell>
-                                            <TableCell>{item.ativo}</TableCell>
+                                            <TableCell align='center' >{item.ativo ? <Chip label='Inativo' sx={{ color: red[800], backgroundColor: red[100]}} /> : <Chip label='Ativo' sx={{ color: green[800], backgroundColor: green[100]}} /> }</TableCell>
                                             <TableCell align='center'>{
                                                 <EditarUsuarios
                                                     id={item._id}

@@ -1,9 +1,10 @@
-import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Paper, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import moment from "moment"
+import { Search } from "@mui/icons-material"
 
 const Financeiro = () => {
 
@@ -18,9 +19,11 @@ const Financeiro = () => {
     const [valor, setValor] = useState('')
     const [flushHook, setFlushHook] = useState(false)
     const [financeiro, setFinanceiro] = useState([])
+    const [countFinanceiro, setCountFinanceiro] = useState([])
 
     const handleClose = async () => {
         setOpen(false)
+        setOpenFinanceiro(false)
     }
 
     const openCriarFinanceiro = async () => {
@@ -46,6 +49,13 @@ const Financeiro = () => {
             setOpen(true)
             setMessage('Financeiro criado com sucesso!')
             setSeverity('success')
+            setOpenFinanceiro(false)
+            setNomeProduto('')
+            setQuantidade('')
+            setTipoPagamento('')
+            setValor('')
+            setDataPagamento('')
+            setFlushHook(true)
             return
         } catch (error) {
             console.log(error);
@@ -56,8 +66,24 @@ const Financeiro = () => {
         try {
             const result = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getFinanceiro`)
             console.log(result);
-            setFinanceiro(result.data)
+            setFinanceiro(result.data.find)
+            setCountFinanceiro(result.data.findCount)
             return
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleFilter = async (event) => {
+        try {
+            event.preventDefault()
+            if (nomeProduto.length > 2) {
+                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/filterFinanceiro?nomeProduto=${nomeProduto}`
+                // &quantidade=${quantidade}&tipoPagamento=${tipoPagamento}&dataPagamento=${dataPagamento}
+                )
+                console.log(filter)
+                setFinanceiro(filter.data)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -148,8 +174,8 @@ const Financeiro = () => {
                                         <MenuItem value={'dinheiro'}>DINHEIRO</MenuItem>
                                         <MenuItem value={'boleto'}>BOLETO</MenuItem>
                                         <MenuItem value={'cheque'}>CHEQUE</MenuItem>
-                                        <MenuItem value={'cartaoCredito'}>CARTÃO CRÉDITO</MenuItem>
-                                        <MenuItem value={'cartaoDebito'}>CARTÃO DÉBITO</MenuItem>
+                                        <MenuItem value={'cartao Crédito'}>CARTÃO CRÉDITO</MenuItem>
+                                        <MenuItem value={'cartao Débito'}>CARTÃO DÉBITO</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <TextField type='date' label='Data Realização Pagamento' onChange={(e) => { setDataPagamento(e.target.value) }} sx={{ mt: 2 }}
@@ -176,12 +202,37 @@ const Financeiro = () => {
                     <Box
                         sx={{ mt: 10 }}
                     >
+                        <form action="">
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => { 
+                                setNomeProduto(e.target.value) 
+                                // || 
+                                // setDataPagamento(e.target.value) ||
+                                // setQuantidade(e.target.value) ||
+                                // setTipoPagamento(e.target.value)
+                            }}
+                                InputProps={{
+                                    style: {
+                                        borderRadius: '10px',
+                                    },
+                                    startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                                }}
+                                fullWidth />
+                        </form>
+                    </Box>
+                    <Box
+                        sx={{ mt: 2 }}
+                    >
+                        <Chip label={`Quantidade de Linhas: ${countFinanceiro}`} color='secondary' />
+                    </Box>
+                    <Box
+                        sx={{ mt: 2 }}
+                    >
                         <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
                             <Table aria-label="simple table" size='small'>
                                 <TableHead sx={{ bgcolor: orange[700] }}>
                                     <TableRow>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Nome Produto/Item</TableCell>
-                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Data Realização Pagamento</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Data Compra</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Quantidade</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Tipo Pagamento</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Valor</TableCell>
@@ -196,7 +247,8 @@ const Financeiro = () => {
                                             <TableCell>{moment(item.dataPagamento).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.quantidade}</TableCell>
                                             <TableCell>{item.tipoPagamento.toUpperCase()}</TableCell>
-                                            <TableCell>{item.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}</TableCell>
+                                            <TableCell>{`R$ ${item.valor}`}</TableCell>
+                                            <TableCell>{`R$ ${item.total.replace('.', ',')}`}</TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
                                     ))}
