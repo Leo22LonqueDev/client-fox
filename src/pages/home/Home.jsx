@@ -7,7 +7,7 @@ const Home = () => {
             <SidebarSee>
                 <Container maxWidth sx={{ textAlign: 'center' }} component={Paper} elevation={7}>
                     <Box>
-                        <Typography>
+                        <Typography variant='h3'>
                             Bem-Vindo!
                         </Typography>
                     </Box>

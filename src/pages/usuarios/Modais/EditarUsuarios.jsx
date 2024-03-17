@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, TextField } from "@mui/material"
+import { Alert, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Snackbar, TextField } from "@mui/material"
 import { useState } from "react"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import axios from "axios";
@@ -14,7 +14,7 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
     const [email, setEmail] = useState(emailUsuario)
     const [setor, setSetor] = useState(setorUsuario)
     const [telefone, setTelefone] = useState(telefoneUsuario)
-    // const [ativo, setAtivo] = useState(ativoUsuario)
+    const [ativo, setAtivo] = useState(ativoUsuario)
     const [dataAdmissao, setDataAdmissao] = useState(dataAdmissaoUsuario)
     const [cpf, setCpf] = useState('')
 
@@ -116,6 +116,12 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
                                     },
                                 }} />
                         </Box>
+                        <FormGroup
+                            label='Usuário Ativo?'
+                        >
+                            <FormControlLabel control={<Checkbox onChange={(e) => {setAtivo(e.target.checked)}} value={ativo} />} label='Ativo' />
+
+                        </FormGroup>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
