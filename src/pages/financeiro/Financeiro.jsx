@@ -21,6 +21,9 @@ const Financeiro = () => {
     const [financeiro, setFinanceiro] = useState([])
     const [countFinanceiro, setCountFinanceiro] = useState([])
 
+    const [totalFinanceiro, setTotalFinanceiro] = useState([])
+    const [mes, setMes] = useState(moment().format('YYYY-MM'))
+
     const handleClose = async () => {
         setOpen(false)
         setOpenFinanceiro(false)
@@ -68,6 +71,8 @@ const Financeiro = () => {
             console.log(result);
             setFinanceiro(result.data.find)
             setCountFinanceiro(result.data.findCount)
+            const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
+            setTotalFinanceiro(totalValor.data.total)
             return
         } catch (error) {
             console.log(error);
@@ -79,7 +84,7 @@ const Financeiro = () => {
             event.preventDefault()
             if (nomeProduto.length > 2) {
                 const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/filterFinanceiro?nomeProduto=${nomeProduto}`
-                // &quantidade=${quantidade}&tipoPagamento=${tipoPagamento}&dataPagamento=${dataPagamento}
+                    // &quantidade=${quantidade}&tipoPagamento=${tipoPagamento}&dataPagamento=${dataPagamento}
                 )
                 console.log(filter)
                 setFinanceiro(filter.data)
@@ -203,8 +208,8 @@ const Financeiro = () => {
                         sx={{ mt: 10 }}
                     >
                         <form action="">
-                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => { 
-                                setNomeProduto(e.target.value) 
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => {
+                                setNomeProduto(e.target.value)
                                 // || 
                                 // setDataPagamento(e.target.value) ||
                                 // setQuantidade(e.target.value) ||
@@ -220,9 +225,23 @@ const Financeiro = () => {
                         </form>
                     </Box>
                     <Box
+                        sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    >
+                        <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => {
+                            setMes(e.target.value)
+                        }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                            }} />
+                        <Chip label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`} color='success' />
+                    </Box>
+                    <Box
                         sx={{ mt: 2 }}
                     >
-                        <Chip label={`Quantidade de Linhas: ${countFinanceiro}`} color='secondary' />
+                        <Chip label={`Quantidade de Linhas: ${countFinanceiro}`} color='success' />
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
