@@ -71,12 +71,18 @@ const Financeiro = () => {
             console.log(result);
             setFinanceiro(result.data.find)
             setCountFinanceiro(result.data.findCount)
-            const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
-            setTotalFinanceiro(totalValor.data.total)
+            // const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
+            // setTotalFinanceiro(totalValor.data.total)
             return
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const updateMes = async () => {
+        const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
+        setTotalFinanceiro(totalValor.data.total)
+        setFlushHook(true)
     }
 
     const handleFilter = async (event) => {
@@ -227,15 +233,17 @@ const Financeiro = () => {
                     <Box
                         sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                     >
-                        <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => {
-                            setMes(e.target.value)
-                        }}
-                            InputProps={{
-                                style: {
-                                    borderRadius: '10px',
-                                },
-                                startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
-                            }} />
+                        <form action="">
+                            <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => {
+                                setMes(e.target.value)
+                            }}
+                                InputProps={{
+                                    style: {
+                                        borderRadius: '10px',
+                                    },
+                                    startAdornment: <IconButton onClick={updateMes} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                                }} />
+                        </form>
                         <Chip label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`} color='success' />
                     </Box>
                     <Box
