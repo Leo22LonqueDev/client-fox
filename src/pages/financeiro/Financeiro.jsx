@@ -3,8 +3,8 @@ import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import moment from "moment"
 import { Search } from "@mui/icons-material"
+import moment from "moment"
 
 const Financeiro = () => {
 
@@ -20,7 +20,6 @@ const Financeiro = () => {
     const [flushHook, setFlushHook] = useState(false)
     const [financeiro, setFinanceiro] = useState([])
     const [countFinanceiro, setCountFinanceiro] = useState([])
-
     const [totalFinanceiro, setTotalFinanceiro] = useState([])
     const [mes, setMes] = useState(moment().format('YYYY-MM'))
 

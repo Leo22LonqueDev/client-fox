@@ -1,5 +1,8 @@
-import { Box, Container, Paper, Typography } from "@mui/material"
+import { Box, Container, Paper, Typography, ThemeProvider } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
+import * as React from 'react'
+import { orange } from "@mui/material/colors"
+
 
 const Home = () => {
     return (
@@ -12,6 +15,65 @@ const Home = () => {
                         </Typography>
                     </Box>
                 </Container>
+
+                <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mt: 7,
+                            mb: 10,
+                            width: 250,
+                            height: 75,
+                            margin: 5,
+                            borderRadius: 5,
+                            bgcolor: orange[700]
+                        }}
+                    >
+                        <Typography variant='h4'>
+                            TESTE!
+                        </Typography>
+
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mt: 7,
+                            mb: 10,
+                            width: 250,
+                            height: 75,
+                            margin: 5,
+                            borderRadius: 5,
+                            bgcolor: orange[700]
+                        }}
+                    >
+                        <Typography variant='h4'>
+                            TESTE!
+                        </Typography>
+
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 250,
+                            height: 75,
+                            ml: 5,
+                            borderRadius: 5,
+                            bgcolor: orange[700]
+                        }}
+                    >
+                        <Typography variant='h4'>
+                            TESTE!
+                        </Typography>
+
+                    </Box>
+
             </SidebarSee>
         </>
     )
