@@ -5,6 +5,7 @@ import Usuarios from "./pages/usuarios/Usuarios"
 import Veiculos from "./pages/veiculos/Veiculos"
 import Financeiro from "./pages/financeiro/Financeiro"
 import HoraAula from "./pages/horaAula/HoraAula"
+import Orcamento from "./pages/orcamento/Orcamento"
 
 
 const AppRoutes = () => {
@@ -15,7 +16,8 @@ const AppRoutes = () => {
             <Route exact path='/veiculos' element={<Veiculos />} />
             <Route exact path='/usuarios' element={<Usuarios />} />
             <Route exact path='/financeiro' element={<Financeiro />} />
-            <Route exact path='/horaaula' element={<HoraAula/>} />
+            <Route exact path='/horaaula' element={<HoraAula />} />
+            <Route exact path='/orcamento' element={<Orcamento />} />
         </Routes>
     )
 }
