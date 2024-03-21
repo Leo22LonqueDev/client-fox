@@ -13,6 +13,7 @@ import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
 import ChecklistRtlOutlinedIcon from '@mui/icons-material/ChecklistRtlOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import DrawIcon from '@mui/icons-material/Draw';
 
 const SidebarSee = ({ children }) => {
 
@@ -43,6 +44,7 @@ const SidebarSee = ({ children }) => {
                     <SubMenu icon={<ChecklistRtlOutlinedIcon />} label='Planilhas' >
                         <MenuItem icon={<AttachMoneyOutlinedIcon />} component={<Link to={'/financeiro'} />} >Financeiro</MenuItem>
                         <MenuItem icon={<AccessTimeOutlinedIcon />} component={<Link to={'/horaaula'} />} >Hora Aula</MenuItem>
+                        <MenuItem icon={<DrawIcon />} component={<Link to={'/orcamento'} />} >Orçamento</MenuItem>
                     </SubMenu>
                 </Menu>
             </Sidebar>
