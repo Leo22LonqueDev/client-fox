@@ -1,26 +1,69 @@
-import { Box, Container, Paper, Typography, ThemeProvider, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, IconButton, DialogTitle, DialogContent, Dialog, DialogContentText, InputLabel, Select, FormControl, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
+import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, IconButton, DialogTitle, DialogContent, Dialog, DialogContentText, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import * as React from 'react'
 import { orange } from "@mui/material/colors"
 import { useState } from "react"
 import { Search } from "@mui/icons-material"
-import { MenuItem } from "react-pro-sidebar"
+import axios from "axios"
+import { useEffect } from "react"
 
 const HoraAula = () => {
 
     const [open, setOpen] = useState(false)
     const [openHoraAula, setOpenHoraAula] = useState(false)
+    const [flushHook, setFlushHook] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+
+    const [carros, setCarros] = useState([])
+    const [usuarios, setUsuarios] = useState([])
+
+    const [modeloVeiculo, setModeloVeiculo] = useState('')
+    const [placa, setPlaca] = useState('')
+    const [instrutor, setInstrutor] = useState('')
+    // const [valorHoraAula, setValorHoraAula] = useState('')
+    // const [valorHoraAulaExtra, setValorHoraAulaExtra] = useState('')
+    const [data, setData] = useState('')
+    const [mes, setMes] = useState('')
 
     const handleClose = async () => {
         setOpen(false)
         setOpenHoraAula(false)
     }
 
-    const getCarros = async () => {
+    const handleCreateHoraAula = async () => {
         try {
-            
+            if ((modeloVeiculo === '') || (placa === '') || (instrutor === '') || (data === '') || (mes === '')) {
+                setOpen(true)
+                setMessage('Informe todos os dados para prosseguir')
+                setSeverity('warning')
+                return
+            }
+            const create = axios.post(`${process.env.REACT_APP_BACKEND}/horaAula/createHoraAula`, {
+                modeloVeiculo,
+                placa,
+                instrutor,
+                data,
+                mes
+            })
+            console.log(create);
+            setOpen(true)
+            setSeverity('success')
+            setMessage('Hora Aula criada com sucesso!')
+            setOpenHoraAula(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getCarrosEUsuarios = async () => {
+        try {
+            const resultCarros = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/getVeiculos`)
+            setCarros(resultCarros.data)
+            console.log(resultCarros.data);
+            const resultPessoas = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
+            setUsuarios(resultPessoas.data.users)
+            console.log(resultPessoas.data.users);
         } catch (error) {
             console.log(error);
         }
@@ -29,6 +72,11 @@ const HoraAula = () => {
     const openCriarFinanceiro = async () => {
         setOpenHoraAula(true)
     }
+
+    useEffect(() => {
+        getCarrosEUsuarios()
+        setFlushHook(false)
+    }, [flushHook])
 
     return (
         <>
@@ -80,39 +128,49 @@ const HoraAula = () => {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description" sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <Autocomplete
-                                disablePortal
-                                id='Veículo'
+                                    disablePortal
+                                    id="carros-auto-complete"
+                                    options={carros}
+                                    onChange={(event, item) => {
+                                        setModeloVeiculo(item.modelo);
+                                        setPlaca(item.placa)
+                                    }}
+                                    getOptionLabel={carros => carros.modelo}
+                                    sx={{ mt: 2 }}
+                                    renderInput={(params) => <TextField {...params} label='Modelo/Veículo' />}
                                 />
-                                <TextField type='text' label='Quantidade' sx={{ mt: 2 }}
+                                {/* <Autocomplete
+                                    disablePortal
+                                    id="nome-auto-complete"
+                                    options={carros}
+                                    onChange={(event, item) => {
+                                        setPlaca(item.placa);
+                                    }}
+                                    getOptionLabel={carros => carros.placa}
+                                    sx={{ mt: 2 }}
+                                    renderInput={(params) => <TextField {...params} label='Placa' />}
+                                /> */}
+                                <Autocomplete
+                                    disablePortal
+                                    id="nome-auto-complete"
+                                    options={usuarios}
+                                    onChange={(event, item) => {
+                                        setInstrutor(item.nome);
+                                    }}
+                                    getOptionLabel={usuarios => usuarios.nome}
+                                    sx={{ mt: 2 }}
+                                    renderInput={(params) => <TextField {...params} label='Nome do Instrutor' />}
+                                />
+                                <TextField type='date' label='Data' onBlur={(e) => { setData(e.target.value) }} sx={{ mt: 2 }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='text' label='Valor' sx={{ mt: 2 }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
-                                <FormControl margin='normal' >
-                                    <InputLabel id="demo-simple-select-label">Tipo de Pagamento</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={''}
-                                        label='Tipo de depagamento'
-
-                                    >
-                                        <MenuItem value={'pix'} >PIX</MenuItem>
-                                        <MenuItem value={'dinheiro'}>DINHEIRO</MenuItem>
-                                        <MenuItem value={'boleto'}>BOLETO</MenuItem>
-                                        <MenuItem value={'cheque'}>CHEQUE</MenuItem>
-                                        <MenuItem value={'cartao Crédito'}>CARTÃO CRÉDITO</MenuItem>
-                                        <MenuItem value={'cartao Débito'}>CARTÃO DÉBITO</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <TextField type='date' label='Data Realização Pagamento' sx={{ mt: 2 }}
+                                <TextField type='month' label='Mês' onBlur={(e) => { setMes(e.target.value) }} sx={{ mt: 2 }}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
@@ -125,7 +183,7 @@ const HoraAula = () => {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose} color='error'>Fechar</Button>
-                            <Button onClick={handleClose} color='success' autoFocus>Criar</Button>
+                            <Button onClick={handleCreateHoraAula} color='success' autoFocus>Criar</Button>
                         </DialogActions>
                     </Dialog>
                     <Snackbar open={open} autoHideDuration={5000} onClose={() => { setOpen(false) }}>

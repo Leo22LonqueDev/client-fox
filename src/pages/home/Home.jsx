@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Typography, ThemeProvider } from "@mui/material"
+import { Box, Container, Paper, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import * as React from 'react'
 import { orange } from "@mui/material/colors"
