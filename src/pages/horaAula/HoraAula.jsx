@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Search } from "@mui/icons-material"
 import axios from "axios"
 import { useEffect } from "react"
+import moment from "moment"
 
 const HoraAula = () => {
 
@@ -17,6 +18,7 @@ const HoraAula = () => {
 
     const [carros, setCarros] = useState([])
     const [usuarios, setUsuarios] = useState([])
+    const [horaAula, setHoraAula] = useState([])
 
     const [modeloVeiculo, setModeloVeiculo] = useState('')
     const [placa, setPlaca] = useState('')
@@ -25,6 +27,8 @@ const HoraAula = () => {
     // const [valorHoraAulaExtra, setValorHoraAulaExtra] = useState('')
     const [data, setData] = useState('')
     const [mes, setMes] = useState('')
+
+    const [pesquisa, setPesquisa] = useState('')
 
     const handleClose = async () => {
         setOpen(false)
@@ -69,12 +73,36 @@ const HoraAula = () => {
         }
     }
 
+    const fetchData = async () => {
+        try {
+            const find = await axios.get(`${process.env.REACT_APP_BACKEND}/horaAula/getHoraAula`)
+            console.log(find.data);
+            setHoraAula(find.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleFilter = async (event) => {
+        try {
+            event.preventDefault()
+            if (pesquisa.length > 2) {
+                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/horaAula/filterHoraAula/${pesquisa}`)
+                console.log(filter)
+                setHoraAula(filter.data)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const openCriarFinanceiro = async () => {
         setOpenHoraAula(true)
     }
 
     useEffect(() => {
         getCarrosEUsuarios()
+        fetchData()
         setFlushHook(false)
     }, [flushHook])
 
@@ -195,12 +223,12 @@ const HoraAula = () => {
                         sx={{ mt: 10 }}
                     >
                         <form action="">
-                            <TextField size="small" type='text' variant='outlined' label='Buscar'
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' onBlur={(e) => { setPesquisa(e.target.value) }}
                                 InputProps={{
                                     style: {
                                         borderRadius: '10px',
                                     },
-                                    startAdornment: <IconButton type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                                    startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
                                 }}
                                 fullWidth />
                         </form>
@@ -222,7 +250,21 @@ const HoraAula = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-
+                                    {
+                                        (horaAula || []).map((item) => {
+                                            return (
+                                                <TableRow key={item._id}>
+                                                    <TableCell>{item.tipo}</TableCell>
+                                                    <TableCell>{item.veiculo}</TableCell>
+                                                    <TableCell>{item.instrutor}</TableCell>
+                                                    <TableCell>{moment(item.data).format('DD/MM/YYYY')}</TableCell>
+                                                    <TableCell>{moment(item.mes).format('MM/YYYY')}</TableCell>
+                                                    <TableCell>{ }</TableCell>
+                                                    <TableCell>{ }</TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
                                 </TableBody>
                             </Table>
                         </TableContainer>
