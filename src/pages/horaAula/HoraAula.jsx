@@ -7,6 +7,7 @@ import { Search } from "@mui/icons-material"
 import axios from "axios"
 import { useEffect } from "react"
 import moment from "moment"
+import QuantidadeHoraAula from "./components/QuantidadeHoraAula"
 
 const HoraAula = () => {
 
@@ -23,8 +24,7 @@ const HoraAula = () => {
     const [modeloVeiculo, setModeloVeiculo] = useState('')
     const [placa, setPlaca] = useState('')
     const [instrutor, setInstrutor] = useState('')
-    // const [valorHoraAula, setValorHoraAula] = useState('')
-    // const [valorHoraAulaExtra, setValorHoraAulaExtra] = useState('')
+    const [quantidadeHoraAulaExtra, setQuantidadeHoraAulaExtra] = useState('')
     const [data, setData] = useState('')
     const [mes, setMes] = useState('')
 
@@ -167,17 +167,6 @@ const HoraAula = () => {
                                     sx={{ mt: 2 }}
                                     renderInput={(params) => <TextField {...params} label='Modelo/Veículo' />}
                                 />
-                                {/* <Autocomplete
-                                    disablePortal
-                                    id="nome-auto-complete"
-                                    options={carros}
-                                    onChange={(event, item) => {
-                                        setPlaca(item.placa);
-                                    }}
-                                    getOptionLabel={carros => carros.placa}
-                                    sx={{ mt: 2 }}
-                                    renderInput={(params) => <TextField {...params} label='Placa' />}
-                                /> */}
                                 <Autocomplete
                                     disablePortal
                                     id="nome-auto-complete"
@@ -259,8 +248,30 @@ const HoraAula = () => {
                                                     <TableCell>{item.instrutor}</TableCell>
                                                     <TableCell>{moment(item.data).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{moment(item.mes).format('MM/YYYY')}</TableCell>
-                                                    <TableCell>{ }</TableCell>
-                                                    <TableCell>{ }</TableCell>
+                                                    <TableCell>
+                                                        <QuantidadeHoraAula
+                                                            item={item}
+                                                            setFlushHook={setFlushHook}
+                                                        />
+                                                        {/* {<TextField type='number' label='Aulas' size='small' value={quantidadeHoraAula} onChange={(e) => { setQuantidadeHoraAula(e.target.value) }}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        InputProps={{
+                                                            style: {
+                                                                borderRadius: '10px',
+                                                            }
+                                                        }} sx={{ width: '150px' }} />} */}
+                                                    </TableCell>
+                                                    <TableCell>{<TextField type='number' label='Aulas Extra' size='small' value={quantidadeHoraAulaExtra} onChange={(e) => { setQuantidadeHoraAulaExtra(e.target.value) }}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        InputProps={{
+                                                            style: {
+                                                                borderRadius: '10px',
+                                                            }
+                                                        }} sx={{ width: '150px' }} />}</TableCell>
                                                 </TableRow>
                                             )
                                         })
