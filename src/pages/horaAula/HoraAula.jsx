@@ -8,6 +8,7 @@ import axios from "axios"
 import { useEffect } from "react"
 import moment from "moment"
 import QuantidadeHoraAula from "./components/QuantidadeHoraAula"
+import QuantidadeHoraAulaExtra from "./components/QuantidadeHoraAulaExtra"
 
 const HoraAula = () => {
 
@@ -24,9 +25,8 @@ const HoraAula = () => {
     const [modeloVeiculo, setModeloVeiculo] = useState('')
     const [placa, setPlaca] = useState('')
     const [instrutor, setInstrutor] = useState('')
-    const [quantidadeHoraAulaExtra, setQuantidadeHoraAulaExtra] = useState('')
     const [data, setData] = useState('')
-    const [mes, setMes] = useState('')
+    // const [mes, setMes] = useState('')
 
     const [pesquisa, setPesquisa] = useState('')
 
@@ -37,24 +37,29 @@ const HoraAula = () => {
 
     const handleCreateHoraAula = async () => {
         try {
-            if ((modeloVeiculo === '') || (placa === '') || (instrutor === '') || (data === '') || (mes === '')) {
+            if ((modeloVeiculo === '') || (instrutor === '') || (data === '')) {
                 setOpen(true)
                 setMessage('Informe todos os dados para prosseguir')
                 setSeverity('warning')
                 return
             }
-            const create = axios.post(`${process.env.REACT_APP_BACKEND}/horaAula/createHoraAula`, {
+            const create = await axios.post(`${process.env.REACT_APP_BACKEND}/horaAula/createHoraAula`, {
                 modeloVeiculo,
                 placa,
                 instrutor,
-                data,
-                mes
+                data
             })
             console.log(create);
             setOpen(true)
             setSeverity('success')
             setMessage('Hora Aula criada com sucesso!')
+            setFlushHook(true)
+            setModeloVeiculo('')
+            setPlaca('')
+            setInstrutor('')
+            setData('')
             setOpenHoraAula(false)
+            return
         } catch (error) {
             console.log(error);
         }
@@ -77,7 +82,21 @@ const HoraAula = () => {
         try {
             const find = await axios.get(`${process.env.REACT_APP_BACKEND}/horaAula/getHoraAula`)
             console.log(find.data);
-            setHoraAula(find.data)
+
+            const sortedData = find.data.slice().sort((a, b) => {
+                const mesA = moment(a.data, 'YYYY-MM-DD');
+                const mesB = moment(b.data, 'YYYY-MM-DD');
+
+                if (mesA.isBefore(mesB)) {
+                    return 1;
+                } else if (mesA.isAfter(mesB)) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            setHoraAula(sortedData)
+            return
         } catch (error) {
             console.log(error);
         }
@@ -101,8 +120,8 @@ const HoraAula = () => {
     }
 
     useEffect(() => {
-        getCarrosEUsuarios()
         fetchData()
+        getCarrosEUsuarios()
         setFlushHook(false)
     }, [flushHook])
 
@@ -187,7 +206,7 @@ const HoraAula = () => {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='month' label='Mês' onBlur={(e) => { setMes(e.target.value) }} sx={{ mt: 2 }}
+                                {/* <TextField type='month' label='Mês' onBlur={(e) => { setMes(e.target.value) }} sx={{ mt: 2 }}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
@@ -195,7 +214,7 @@ const HoraAula = () => {
                                         style: {
                                             borderRadius: '10px',
                                         }
-                                    }} />
+                                    }} /> */}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -253,25 +272,13 @@ const HoraAula = () => {
                                                             item={item}
                                                             setFlushHook={setFlushHook}
                                                         />
-                                                        {/* {<TextField type='number' label='Aulas' size='small' value={quantidadeHoraAula} onChange={(e) => { setQuantidadeHoraAula(e.target.value) }}
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        InputProps={{
-                                                            style: {
-                                                                borderRadius: '10px',
-                                                            }
-                                                        }} sx={{ width: '150px' }} />} */}
                                                     </TableCell>
-                                                    <TableCell>{<TextField type='number' label='Aulas Extra' size='small' value={quantidadeHoraAulaExtra} onChange={(e) => { setQuantidadeHoraAulaExtra(e.target.value) }}
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        InputProps={{
-                                                            style: {
-                                                                borderRadius: '10px',
-                                                            }
-                                                        }} sx={{ width: '150px' }} />}</TableCell>
+                                                    <TableCell>
+                                                        <QuantidadeHoraAulaExtra
+                                                            item={item}
+                                                            setFlushHook={setFlushHook}
+                                                        />
+                                                    </TableCell>
                                                 </TableRow>
                                             )
                                         })

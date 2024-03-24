@@ -268,7 +268,7 @@ const Financeiro = () => {
                                 </TableHead>
                                 <TableBody>
                                     {financeiro.map((item) => (
-                                        <TableRow>
+                                        <TableRow key={item._id}>
                                             <TableCell>{item.nomeProduto}</TableCell>
                                             <TableCell>{moment(item.dataPagamento).format('DD/MM/YYYY')}</TableCell>
                                             <TableCell>{item.quantidade}</TableCell>
