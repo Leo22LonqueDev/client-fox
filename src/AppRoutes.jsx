@@ -6,13 +6,14 @@ import Veiculos from "./pages/veiculos/Veiculos"
 import Financeiro from "./pages/financeiro/Financeiro"
 import HoraAula from "./pages/horaAula/HoraAula"
 import Orcamento from "./pages/orcamento/Orcamento"
+import ProtectedRoute from "./ProtectedRoute"
 
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route exact path='/login' element={<Login />} />
-            <Route exact path='/' element={<Home />} />
+            <Route exact path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route exact path='/veiculos' element={<Veiculos />} />
             <Route exact path='/usuarios' element={<Usuarios />} />
             <Route exact path='/financeiro' element={<Financeiro />} />
