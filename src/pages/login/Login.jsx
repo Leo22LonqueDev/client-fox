@@ -7,7 +7,7 @@ import axios from "axios"
 const Login = () => {
 
     const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
+    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -16,7 +16,7 @@ const Login = () => {
         try {
             const result = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, {
                 email,
-                senha
+                password
             })
             console.log(result);
             if (result.status === 200) {
@@ -42,7 +42,7 @@ const Login = () => {
                             <img src={logo} alt='LogoFox' />
                             <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} value={email} variant='standard' sx={{ width: '300px' }} />
                             <br />
-                            <TextField type='password' label='Senha' onChange={(e) => { setSenha(e.target.value) }} value={senha} variant='standard' sx={{ width: '300px' }} />
+                            <TextField type='password' label='Senha' onChange={(e) => { setPassword(e.target.value) }} value={password} variant='standard' sx={{ width: '300px' }} />
                             <br />
                             <Button type='submit' variant='contained' onClick={handleSubmit} >LOGIN</Button>
                         </Box>
