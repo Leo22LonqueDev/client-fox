@@ -231,6 +231,7 @@ const Usuarios = () => {
                                                     telefoneUsuario={item.telefone}
                                                     ativoUsuario={item.ativo}
                                                     dataAdmissaoUsuario={item.dataAdmissao}
+                                                    cpfUsuario={item.cpf}
                                                     setFlushHook={setFlushHook}
                                                 />
                                             }</TableCell>

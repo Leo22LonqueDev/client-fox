@@ -81,7 +81,7 @@ const Financeiro = () => {
     const updateMes = async () => {
         const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
         setTotalFinanceiro(totalValor.data.total)
-        setFlushHook(true)
+        // setFlushHook(true)
     }
 
     const handleFilter = async (event) => {
@@ -240,15 +240,15 @@ const Financeiro = () => {
                                     style: {
                                         borderRadius: '10px',
                                     },
-                                    startAdornment: <IconButton onClick={updateMes} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                                    startAdornment: <IconButton onClick={updateMes} type='button' size='small'><Search sx={{ mr: 1 }} /></IconButton>
                                 }} />
                         </form>
-                        <Chip label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`} color='success' />
+                        <Chip label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`} color='success' sx={{ fontSize: '25px', p: 1 }} />
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
                     >
-                        <Chip label={`Quantidade de Linhas: ${countFinanceiro}`} color='success' />
+                        <Chip label={`Linhas: ${countFinanceiro}`} color='success' />
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
