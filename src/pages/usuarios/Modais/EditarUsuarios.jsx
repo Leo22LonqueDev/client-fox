@@ -3,7 +3,7 @@ import { useState } from "react"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import axios from "axios";
 
-const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneUsuario, ativoUsuario, dataAdmissaoUsuario, setFlushHook }) => {
+const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneUsuario, ativoUsuario, dataAdmissaoUsuario, cpfUsuario, setFlushHook }) => {
 
     const [openDetails, setOpenDetails] = useState(false)
     const [open, setOpen] = useState(false)
@@ -16,7 +16,7 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
     const [telefone, setTelefone] = useState(telefoneUsuario)
     const [ativo, setAtivo] = useState(ativoUsuario)
     const [dataAdmissao, setDataAdmissao] = useState(dataAdmissaoUsuario)
-    const [cpf, setCpf] = useState('')
+    const [cpf, setCpf] = useState(cpfUsuario)
 
     const handleOpenDetails = async () => {
         setOpenDetails(true)
@@ -119,7 +119,7 @@ const EditarUsuarios = ({ id, nomeUsuario, emailUsuario, setorUsuario, telefoneU
                         <FormGroup
                             label='Usuário Ativo?'
                         >
-                            <FormControlLabel control={<Checkbox onChange={(e) => {setAtivo(e.target.checked)}} value={ativo} />} label='Ativo' />
+                            <FormControlLabel control={<Checkbox onChange={(e) => { setAtivo(e.target.checked) }} value={ativo} />} label='Ativo' />
 
                         </FormGroup>
                     </DialogContentText>
