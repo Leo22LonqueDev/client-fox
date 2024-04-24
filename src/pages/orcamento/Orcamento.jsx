@@ -32,7 +32,7 @@ const Orcamento = () => {
     const handleCriarOrcamento = async () => {
         try {
 
-            if ((nome === '') || (telefone === '') || (situacaoinicial === '') || (categoria === '') || (dia === '') || (situacaofinal === '')) {
+            if ((nome === '') || (telefone === '') ||  (categoria === '') || (dia === '')) {
                 setOpen(true)
                 setSeverity('warning')
                 setMessage('Dados faltando, favor inserir todos os campos!')
@@ -99,19 +99,13 @@ const Orcamento = () => {
                                         borderRadius: '10px',
                                     }
                                 }} />
-                                <TextField type='number' label='Telefone' onBlur={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }}
+                                <TextField type='text' label='Telefone' onBlur={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }}
                                     InputProps={{
                                         style: {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='text' label='Situação inicial' onBlur={(e) => { setSituacaoInicial(e.target.value) }} sx={{ mt: 2 }}
-
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
+                                
                                 <TextField type='text' label='Categoria' onBlur={(e) => { setCategoria(e.target.value) }} sx={{ mt: 2 }}
                                     InputProps={{
                                         style: {
@@ -124,12 +118,7 @@ const Orcamento = () => {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                <TextField type='text' label='Situação final' onBlur={(e) => { setSituacaoFinal(e.target.value) }} sx={{ mt: 2 }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
+                                
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -138,7 +127,42 @@ const Orcamento = () => {
                         </DialogActions>
                     </Dialog>
 
+                    <Box sx={{ mt: 2 }}>
+                        <form action="">
+                            <TextField size="small" type='text' variant='outlined' label='Buscar' 
+                                InputProps={{
+                                    style: {
+                                        borderRadius: '10px',
+                                    },
+                                    startAdornment: <IconButton type="submit" size='small' ><Search /></IconButton>
+                                }}
+                                fullWidth />
+                        </form>
+                    </Box>
+
+                    <Box sx={{ mt: 2 }}>
+                        <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
+                            <Table aria-label="simple table" size='small' >
+                                <TableHead sx={{ bgcolor: orange[700] }}>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Nome</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Telefone</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Situação inicial</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Categoria</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Dia</TableCell>
+                                        <TableCell align='center' sx={{ color: 'white', fontSize: '15px' }}>Situação Final</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+
                 </Container>
+
+                
             </SidebarSee>
         </>
     )
