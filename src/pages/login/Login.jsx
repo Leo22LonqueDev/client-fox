@@ -38,14 +38,16 @@ const Login = () => {
                     loading ? (
                         <CircularProgress />
                     ) : (
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: orange[50], padding: '40px', borderRadius: '15px', height: '400px' }}>
-                            <img src={logo} alt='LogoFox' />
-                            <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} value={email} variant='standard' sx={{ width: '300px' }} />
-                            <br />
-                            <TextField type='password' label='Senha' onChange={(e) => { setPassword(e.target.value) }} value={password} variant='standard' sx={{ width: '300px' }} />
-                            <br />
-                            <Button type='submit' variant='contained' onClick={handleSubmit} >LOGIN</Button>
-                        </Box>
+                        <form>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: orange[50], padding: '40px', borderRadius: '15px', height: '400px' }}>
+                                <img src={logo} alt='LogoFox' />
+                                <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} value={email} variant='standard' sx={{ width: '300px' }} />
+                                <br />
+                                <TextField type='password' label='Senha' onChange={(e) => { setPassword(e.target.value) }} value={password} variant='standard' sx={{ width: '300px' }} />
+                                <br />
+                                <Button type='submit' variant='contained' onClick={handleSubmit} >LOGIN</Button>
+                            </Box>
+                        </form>
                     )
                 }
             </Container>
