@@ -23,17 +23,8 @@ const ProfileMenu = () => {
     };
 
     const logout = async () => {
-        const result = await Axios.post(`${process.env.REACT_APP_API_KEY}/logout`, {}, { withCredentials: true })
+        const result = await Axios.post(`${process.env.REACT_APP_BACKEND}/logout`, {}, { withCredentials: true })
         localStorage.clear();
-        // Limpar os cookies
-        var cookies = document.cookie.split(";");
-
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        }
 
         if (result.status === 200) {
             navigate('/login')
@@ -51,10 +42,9 @@ const ProfileMenu = () => {
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    {/* <Avatar sx={{ width: 32, height: 32 }} alt={name} src={`${process.env.REACT_APP_API_KEY}/media/profilePic/${name.split(' ').join('%20')}.jpg`}></Avatar> */}
+                    <Avatar sx={{ width: 32, height: 32 }}></Avatar>
                 </IconButton>
             </Tooltip>
-
             <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
@@ -92,12 +82,12 @@ const ProfileMenu = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem
+                {/* <MenuItem
                     component={Link}
                     to='/profile'
                 >
                     <Avatar /> Perfil
-                </MenuItem>
+                </MenuItem> */}
                 {/* <MenuItem onClick={handleClose}>
                     <Avatar /> My account
                 </MenuItem>
