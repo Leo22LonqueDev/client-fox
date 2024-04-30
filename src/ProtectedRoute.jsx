@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
         try {
             const result = await axios.get(`${process.env.REACT_APP_BACKEND}/verifyAcesso`)
             setName(result.nome)
-            console.log(result.data);
+            // console.log(result.data);
 
         } 
         catch (error) {

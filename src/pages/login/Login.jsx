@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Container, TextField } from "@mui/material"
+import { Alert, AlertTitle, Box, Button, CircularProgress, Container, TextField } from "@mui/material"
 import { orange } from "@mui/material/colors"
 import logo from '../../imgs/logo.png'
 import { useState } from "react"
@@ -9,6 +9,7 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -27,6 +28,7 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error);
+            setError(true)
             setLoading(false)
         }
     }
@@ -45,11 +47,20 @@ const Login = () => {
                                 <br />
                                 <TextField type='password' label='Senha' onChange={(e) => { setPassword(e.target.value) }} value={password} variant='standard' sx={{ width: '300px' }} />
                                 <br />
-                                <Button type='submit' variant='contained' onClick={handleSubmit} >LOGIN</Button>
+                                <Button type='submit' variant='contained' onClick={handleSubmit} sx={{ mb: 15 }} >LOGIN</Button>
+                                {
+                                    error ? (
+                                        <Alert variant='filled' color='error'>
+                                            <AlertTitle>Erro ao entrar</AlertTitle>
+                                            Senha ou e-mail incorretos!
+                                        </Alert>
+                                    ) : null
+                                }
                             </Box>
                         </form>
                     )
                 }
+
             </Container>
         </>
     )
