@@ -1,14 +1,14 @@
-import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, IconButton, DialogTitle, DialogContent, Dialog, DialogContentText, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
+import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, DialogTitle, DialogContent, Dialog, DialogContentText, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import * as React from 'react'
 import { orange } from "@mui/material/colors"
-import { useState } from "react"
-import { Search } from "@mui/icons-material"
+import { Clear } from "@mui/icons-material"
 import axios from "axios"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import moment from "moment"
 import QuantidadeHoraAula from "./components/QuantidadeHoraAula"
 import QuantidadeHoraAulaExtra from "./components/QuantidadeHoraAulaExtra"
+import { filterHoraAula } from "../../_services/horaAula.service"
 
 const HoraAula = () => {
 
@@ -26,9 +26,7 @@ const HoraAula = () => {
     const [placa, setPlaca] = useState('')
     const [instrutor, setInstrutor] = useState('')
     const [data, setData] = useState('')
-    // const [mes, setMes] = useState('')
-
-    const [pesquisa, setPesquisa] = useState('')
+    const [mes, setMes] = useState('')
 
     const handleClose = async () => {
         setOpen(false)
@@ -49,7 +47,7 @@ const HoraAula = () => {
                 instrutor,
                 data
             })
-            console.log(create);
+            // console.log(create);
             setOpen(true)
             setSeverity('success')
             setMessage('Hora Aula criada com sucesso!')
@@ -69,47 +67,49 @@ const HoraAula = () => {
         try {
             const resultCarros = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/getVeiculos`)
             setCarros(resultCarros.data)
-            console.log(resultCarros.data);
+            // console.log(resultCarros.data);
             const resultPessoas = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
             setUsuarios(resultPessoas.data.users)
-            console.log(resultPessoas.data.users);
+            // console.log(resultPessoas.data.users);
         } catch (error) {
             console.log(error);
         }
     }
 
-    const fetchData = async () => {
+    // const fetchData = async () => {
+    //     try {
+    //         const find = await getAllHoraAula()
+    //         console.log(find);
+
+    //         const sortedData = find.slice().sort((a, b) => {
+    //             const mesA = moment(a.data, 'YYYY-MM-DD');
+    //             const mesB = moment(b.data, 'YYYY-MM-DD');
+
+    //             if (mesA.isBefore(mesB)) {
+    //                 return 1;
+    //             } else if (mesA.isAfter(mesB)) {
+    //                 return -1;
+    //             } else {
+    //                 return 0;
+    //             }
+    //         });
+    //         // console.log(sortedData);
+    //         setHoraAula(sortedData)
+    //         return
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    const handleFilter = async () => {
         try {
-            const find = await axios.get(`${process.env.REACT_APP_BACKEND}/horaAula/getHoraAula`)
-            console.log(find.data);
-
-            const sortedData = find.data.slice().sort((a, b) => {
-                const mesA = moment(a.data, 'YYYY-MM-DD');
-                const mesB = moment(b.data, 'YYYY-MM-DD');
-
-                if (mesA.isBefore(mesB)) {
-                    return 1;
-                } else if (mesA.isAfter(mesB)) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
-            setHoraAula(sortedData)
-            return
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const handleFilter = async (event) => {
-        try {
-            event.preventDefault()
-            if (pesquisa.length > 2) {
-                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/horaAula/filterHoraAula/${pesquisa}`)
-                console.log(filter)
-                setHoraAula(filter.data)
-            }
+            const filter = await filterHoraAula(
+                modeloVeiculo,
+                instrutor,
+                mes
+            )
+            console.log(filter)
+            setHoraAula(filter)
         } catch (error) {
             console.log(error);
         }
@@ -120,10 +120,10 @@ const HoraAula = () => {
     }
 
     useEffect(() => {
-        fetchData()
+        handleFilter()
         getCarrosEUsuarios()
         setFlushHook(false)
-    }, [flushHook])
+    }, [flushHook, modeloVeiculo, instrutor, mes])
 
     return (
         <>
@@ -206,15 +206,6 @@ const HoraAula = () => {
                                             borderRadius: '10px',
                                         }
                                     }} />
-                                {/* <TextField type='month' label='Mês' onBlur={(e) => { setMes(e.target.value) }} sx={{ mt: 2 }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} /> */}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -228,18 +219,46 @@ const HoraAula = () => {
                         </Alert>
                     </Snackbar>
                     <Box
-                        sx={{ mt: 10 }}
+                        sx={{ mt: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                     >
-                        <form action="">
-                            <TextField size="small" type='text' variant='outlined' label='Buscar' onBlur={(e) => { setPesquisa(e.target.value) }}
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px',
-                                    },
-                                    startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
-                                }}
-                                fullWidth />
-                        </form>
+                        <TextField size="small" type='text' variant='outlined' label='Instrutor' value={instrutor} onChange={(e) => { setInstrutor(e.target.value) }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                }
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        />
+                        <TextField size="small" type='text' variant='outlined' label='Veículo' value={modeloVeiculo} onChange={(e) => { setModeloVeiculo(e.target.value) }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        />
+                        <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => { setMes(e.target.value) }}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        />
+                        <Button variant='contained' onClick={() => {
+                            setInstrutor('')
+                            setModeloVeiculo('')
+                            setMes('')
+                            setFlushHook(true)
+
+                        }}
+                            sx={{ borderRadius: '10px' }}><Clear /></Button>
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
@@ -259,7 +278,7 @@ const HoraAula = () => {
                                 </TableHead>
                                 <TableBody>
                                     {
-                                        (horaAula || []).map((item) => {
+                                        horaAula.map((item) => {
                                             return (
                                                 <TableRow key={item._id}>
                                                     <TableCell>{item.tipo}</TableCell>
@@ -270,13 +289,11 @@ const HoraAula = () => {
                                                     <TableCell>
                                                         <QuantidadeHoraAula
                                                             item={item}
-                                                            setFlushHook={setFlushHook}
                                                         />
                                                     </TableCell>
                                                     <TableCell>
                                                         <QuantidadeHoraAulaExtra
                                                             item={item}
-                                                            setFlushHook={setFlushHook}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -288,7 +305,7 @@ const HoraAula = () => {
                         </TableContainer>
                     </Box>
                 </Container>
-            </SidebarSee>
+            </SidebarSee >
         </>
     )
 }
