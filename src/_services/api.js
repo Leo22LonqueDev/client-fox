@@ -2,9 +2,7 @@ import axios from "axios";
 
 export class ApiCall {
 
-    constructor(route, apiBaseUrl = process.env.REACT_API_BACKEND, 
-        token = localStorage.getItem('token'), config = undefined
-        ) {
+    constructor(route, apiBaseUrl = process.env.REACT_APP_BACKEND, token = localStorage.getItem('token'), config = undefined) {
         this.base = apiBaseUrl;
         this.currentRoute = route;
         this.currentConfig = config;

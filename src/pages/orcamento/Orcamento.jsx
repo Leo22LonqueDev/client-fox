@@ -1,47 +1,61 @@
-import { Box, Container, Paper, Typography, ThemeProvider, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, IconButton, DialogTitle, DialogContent, Dialog, DialogContentText, InputLabel, Select, FormControl, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
+import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, Snackbar, Alert, Pagination, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
-import * as React from 'react'
 import { orange } from "@mui/material/colors"
-import { useState } from "react"
-import { Search } from "@mui/icons-material"
-import { MenuItem } from "react-pro-sidebar"
+import { Clear, Search } from "@mui/icons-material"
+import moment from "moment"
+import { useEffect, useState } from "react"
+import { filterOrcamento } from "../../_services/orcamento.service"
+import ModalCreateOrcamento from "./components/ModalCreateOrcamento"
 
 const Orcamento = () => {
 
     const [open, setOpen] = useState(false)
-    const [openOrcamento, setOpenOrcamento] = useState(false)
     const [severity, setSeverity] = useState('')
     const [message, setMessage] = useState('')
+
     const [nome, setNome] = useState('')
-    const [telefone, setTelefone] = useState('')
-    const [situacaoinicial, setSituacaoInicial] = useState('')
     const [categoria, setCategoria] = useState('')
     const [dia, setDia] = useState('')
-    const [situacaofinal, setSituacaoFinal] = useState('')
+    // const [situacaoinicial, setSituacaoInicial] = useState('')
+    // const [situacaofinal, setSituacaoFinal] = useState('')
 
-    const handleOpenOrcamento = async () => {
-        setOpenOrcamento(true)
-    }
+    const [flushHook, setFlushHook] = useState(false)
+    const [orcamentos, setOrcamentos] = useState([])
 
-    const handleClose = async () => {
-        setOpenOrcamento(false)
-    }
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [totalPages, setTotalPages] = useState(1)
+    const [loading, setLoading] = useState(false)
 
-
-
-    const handleCriarOrcamento = async () => {
+    const fetchFilterData = async () => {
+        setLoading(true)
         try {
-
-            if ((nome === '') || (telefone === '') ||  (categoria === '') || (dia === '')) {
-                setOpen(true)
-                setSeverity('warning')
-                setMessage('Dados faltando, favor inserir todos os campos!')
-                return
-            }
+            const result = await filterOrcamento(
+                nome,
+                categoria,
+                dia,
+                page,
+                rowsPerPage
+            )
+            setOrcamentos(result.filter)
+            setTotalPages(result.total)
+            setOpen(true)
+            setSeverity('success')
+            setMessage('Dados Filtrados!')
+            console.log(result);
         } catch (error) {
+            console.log(error);
+            setOpen(true)
+            setSeverity('error')
+            setMessage('Erro!')
         }
-
+        setLoading(false)
     }
+
+    useEffect(() => {
+        fetchFilterData()
+        setFlushHook(false)
+    }, [flushHook, nome, categoria, dia, page, rowsPerPage])
 
     return (
         <>
@@ -79,67 +93,79 @@ const Orcamento = () => {
                         >
                             Orçamento
                         </Typography>
-                        <Button type='Button' variant='contained' color='info' onClick={handleOpenOrcamento} >Adicionar Orçamento </Button>
-
+                        <ModalCreateOrcamento setFlushHook={setFlushHook} />
                     </Box>
-                    <Dialog
-                        open={openOrcamento}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Informe o Veículo"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description" sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <TextField type='text' label='Nome' onBlur={(e) => { setNome(e.target.value) }} sx={{ mt: 2 }} InputProps={{
-                                    style: {
-                                        borderRadius: '10px',
-                                    }
-                                }} />
-                                <TextField type='text' label='Telefone' onBlur={(e) => { setTelefone(e.target.value) }} sx={{ mt: 2 }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
-                                
-                                <TextField type='text' label='Categoria' onBlur={(e) => { setCategoria(e.target.value) }} sx={{ mt: 2 }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
-                                <TextField type='text' label='Dia' onBlur={(e) => { setDia(e.target.value) }} sx={{ mt: 2 }}
-                                    InputProps={{
-                                        style: {
-                                            borderRadius: '10px',
-                                        }
-                                    }} />
-                                
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color='error'>Fechar</Button>
-                            <Button onClick={handleCriarOrcamento} color='success' autoFocus>Criar</Button>
-                        </DialogActions>
-                    </Dialog>
-
-                    <Box sx={{ mt: 2 }}>
-                        <form action="">
-                            <TextField size="small" type='text' variant='outlined' label='Buscar' 
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px',
-                                    },
-                                    startAdornment: <IconButton type="submit" size='small' ><Search /></IconButton>
-                                }}
-                                fullWidth />
-                        </form>
+                    <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
+                        <TextField size="small" type='text' variant='outlined' label='Nome' value={nome} onChange={(e) => { setNome(e.target.value) }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <Search />
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        />
+                        <FormControl size='small' fullWidth>
+                            <InputLabel>Categoria</InputLabel>
+                            <Select label='Categoria' value={categoria} onChange={(e) => { setCategoria(e.target.value) }} sx={{ borderRadius: '10px', mr: 2 }}>
+                                <MenuItem value={'Moto'}>MOTO - (A)</MenuItem>
+                                <MenuItem value={'Carro'}>CARRO - (B)</MenuItem>
+                                <MenuItem value={'Moto e Carro'}>MOTO E CARRO - (A/B)</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {/* <TextField size="small" type='text' variant='outlined' label='Categoria' value={categoria} onChange={(e) => { setCategoria(e.target.value) }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <Search />
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        /> */}
+                        <TextField size="small" type='date' variant='outlined' label='Data' value={dia} onChange={(e) => { setDia(e.target.value) }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <Search />
+                            }}
+                            fullWidth
+                            sx={{ mr: 2 }}
+                        />
+                        <Button variant="contained" onClick={() => {
+                            setNome('')
+                            setCategoria('')
+                            setDia('')
+                            setFlushHook(true)
+                        }} sx={{ borderRadius: '10px' }}><Clear /></Button>
                     </Box>
-
+                    <Box display={'flex'} justifyContent={'space-between'} sx={{ mb: 2, mt: 2 }}>
+                        <FormControl size="small" disabled={loading}>
+                            <InputLabel>Linhas</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Linhas"
+                                sx={{ width: '100px', borderRadius: '10px' }}
+                                value={rowsPerPage}
+                                onChange={(e) => setRowsPerPage(e.target.value)}
+                            >
+                                <MenuItem value={10} >10</MenuItem>
+                                <MenuItem value={20} >20</MenuItem>
+                                <MenuItem value={30} >30</MenuItem>
+                                <MenuItem value={40} >40</MenuItem>
+                                <MenuItem value={50} >50</MenuItem>
+                                <MenuItem value={100} >100</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Pagination count={
+                            totalPages % rowsPerPage === 0 ?
+                                Math.floor(totalPages / rowsPerPage) :
+                                Math.floor(totalPages / rowsPerPage) + 1
+                        } page={page} onChange={(e, value) => setPage(value)} disabled={loading} />
+                    </Box>
                     <Box sx={{ mt: 2 }}>
                         <TableContainer component={Paper} elevation={3} sx={{ borderRadius: '10px' }}>
                             <Table aria-label="simple table" size='small' >
@@ -155,14 +181,27 @@ const Orcamento = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
+                                    {orcamentos.map((item) => (
+                                        <TableRow key={item._id}>
+                                            <TableCell></TableCell>
+                                            <TableCell>{item.nome}</TableCell>
+                                            <TableCell>{item.telefone}</TableCell>
+                                            <TableCell>{item.situacaoInicial}</TableCell>
+                                            <TableCell>{item.categoria}</TableCell>
+                                            <TableCell>{moment(item.dia).format('DD/MM/YYYY')}</TableCell>
+                                            <TableCell>{item.situacaoFinal}</TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <Snackbar open={open} autoHideDuration={5000} onClose={() => { setOpen(false) }}>
+                            <Alert severity={severity} variant='filled'>
+                                {message}
+                            </Alert>
+                        </Snackbar>
                     </Box>
-
                 </Container>
-
-                
             </SidebarSee>
         </>
     )

@@ -5,6 +5,7 @@ import { Search } from "@mui/icons-material"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import EditarUsuarios from "./Modais/EditarUsuarios"
+import { getUsers } from "../../_services/user.service"
 
 const Usuarios = () => {
 
@@ -63,10 +64,9 @@ const Usuarios = () => {
 
     const fetchData = async () => {
         try {
-            const result = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
-            setUsers(result.data.users)
-            console.log(result.data.users);
-            return
+            const result = await getUsers()
+            setUsers(result)
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -211,7 +211,7 @@ const Usuarios = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {users.map((item) => (
+                                    {users?.map((item) => (
                                         <TableRow
                                             key={item._id}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

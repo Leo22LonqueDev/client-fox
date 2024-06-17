@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
-import { orange } from "@mui/material/colors"
+import { green, orange } from "@mui/material/colors"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Search } from "@mui/icons-material"
@@ -81,28 +81,28 @@ const Financeiro = () => {
     const updateMes = async () => {
         const totalValor = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/getValorTotalMesFinanceiro/${mes}`)
         setTotalFinanceiro(totalValor.data.total)
-        // setFlushHook(true)
     }
 
-    const handleFilter = async (event) => {
+    const handleFilter = async () => {
         try {
-            event.preventDefault()
-            if (nomeProduto.length > 2) {
-                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/filterFinanceiro?nomeProduto=${nomeProduto}`
-                    // &quantidade=${quantidade}&tipoPagamento=${tipoPagamento}&dataPagamento=${dataPagamento}
-                )
-                console.log(filter)
-                setFinanceiro(filter.data)
-            }
+            const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/financeiro/filterFinanceiro?nomeProduto=${nomeProduto}`
+                // &quantidade=${quantidade}&tipoPagamento=${tipoPagamento}&dataPagamento=${dataPagamento}
+            )
+            console.log(filter)
+            setFinanceiro(filter.data)
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        fetchData()
+        if (nomeProduto === '') {
+            fetchData()
+        }
+        handleFilter()
+        updateMes()
         setFlushHook(false)
-    }, [flushHook])
+    }, [flushHook, nomeProduto, mes])
 
     return (
         <>
@@ -212,43 +212,63 @@ const Financeiro = () => {
                     <Box
                         sx={{ mt: 10 }}
                     >
-                        <form action="">
-                            <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => {
-                                setNomeProduto(e.target.value)
-                                // || 
-                                // setDataPagamento(e.target.value) ||
-                                // setQuantidade(e.target.value) ||
-                                // setTipoPagamento(e.target.value)
+                        {/* <form action=""> */}
+                        <TextField size="small" type='text' variant='outlined' label='Buscar' onChange={(e) => {
+                            setNomeProduto(e.target.value)
+                            // || 
+                            // setDataPagamento(e.target.value) ||
+                            // setQuantidade(e.target.value) ||
+                            // setTipoPagamento(e.target.value)
+                        }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <IconButton type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
                             }}
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px',
-                                    },
-                                    startAdornment: <IconButton onClick={handleFilter} type='submit' size='small'><Search sx={{ mr: 1 }} /></IconButton>
-                                }}
-                                fullWidth />
-                        </form>
+                            fullWidth />
+                        {/* </form> */}
                     </Box>
                     <Box
                         sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                     >
-                        <form action="">
-                            <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => {
-                                setMes(e.target.value)
+                        {/* <form action=""> */}
+                        <TextField size="small" type='month' variant='outlined' label='Mês' value={mes} onChange={(e) => {
+                            setMes(e.target.value)
+                        }}
+                            InputProps={{
+                                style: {
+                                    borderRadius: '10px',
+                                },
+                                startAdornment: <IconButton type='button' size='small'><Search sx={{ mr: 1 }} /></IconButton>
+                            }} />
+                        {/* </form> */}
+                        <Chip
+                            component={Paper}
+                            elevation={7}
+                            label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`}
+                            sx={{
+                                fontSize: '20px',
+                                background: `linear-gradient(45deg, ${orange[700]}, white)`,
+                                color: 'black',
+                                p: 2,
+                                // border: '2px solid black',
                             }}
-                                InputProps={{
-                                    style: {
-                                        borderRadius: '10px',
-                                    },
-                                    startAdornment: <IconButton onClick={updateMes} type='button' size='small'><Search sx={{ mr: 1 }} /></IconButton>
-                                }} />
-                        </form>
-                        <Chip label={`Valor total do mês de ${moment(mes).format('MM/YYYY')}: R$ ${totalFinanceiro}`} color='success' sx={{ fontSize: '25px', p: 1 }} />
+                        />
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
                     >
-                        <Chip label={`Linhas: ${countFinanceiro}`} color='success' />
+                        <Chip
+                            component={Paper}
+                            elevation={7}
+                            label={`Linhas: ${countFinanceiro}`} color='success'
+                            sx={{
+                                background: `linear-gradient(45deg, ${orange[700]}, white)`,
+                                color: 'black',
+                                // border: '2px solid black',
+                            }}
+                        />
                     </Box>
                     <Box
                         sx={{ mt: 2 }}
