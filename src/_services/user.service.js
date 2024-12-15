@@ -10,5 +10,5 @@ export const getUsers = async () => {
 }
 
 export const loginUser = async (body) => {
-    return await new ApiCall(`/login`, uri).post(body)
+    return await new ApiCall(`/login`).post(body)
 }
