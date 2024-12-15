@@ -1,15 +1,24 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Container, TextField } from "@mui/material"
+import { Alert, AlertTitle, Box, Button, CircularProgress, Container, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material"
 import { orange } from "@mui/material/colors"
 import logo from '../../imgs/logo.png'
 import { useState } from "react"
 import { loginUser } from "../../_services/user.service"
+import axios from "axios"
+import { RemoveRedEyeOutlined, Visibility, VisibilityOff, VisibilityOffOutlined } from "@mui/icons-material"
 
 const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const [seeSenha, setSeeSenha] = useState(false);
+    const [changeVisualizarSenha, setChangeVisualizarSenha] = useState('password');
     const [error, setError] = useState(false)
+
+    const handleToggleSenhaVisibility = () => {
+        setSeeSenha(!seeSenha);
+        setChangeVisualizarSenha(seeSenha ? 'password' : 'text');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -49,7 +58,35 @@ const Login = () => {
                                 <img src={logo} alt='LogoFox' />
                                 <TextField type='email' label='E-mail' onChange={(e) => { setEmail(e.target.value) }} value={email} variant='standard' sx={{ width: '300px' }} />
                                 <br />
-                                <TextField type='password' label='Senha' onChange={(e) => { setPassword(e.target.value) }} value={password} variant='standard' sx={{ width: '300px' }} />
+                                <TextField
+                                    variant="standard"
+                                    label='Senha'
+                                    placeholder='Senha'
+                                    sx={{ width: '100%', mt: 2 }}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    type={changeVisualizarSenha}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton size='small' onClick={handleToggleSenhaVisibility}>
+                                                    {
+                                                        changeVisualizarSenha === 'password' ? (
+                                                            <Tooltip title='Verificar senha' >
+                                                                <RemoveRedEyeOutlined />
+                                                            </Tooltip>
+                                                        ) : (
+                                                            <Tooltip title='Esconder senha' >
+                                                                <VisibilityOffOutlined />
+                                                            </Tooltip>
+                                                        )
+                                                    }
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                        style: { borderRadius: '10px' }
+                                    }}
+                                />
                                 <br />
                                 <Button type='submit' variant='contained' onClick={handleSubmit} sx={{ mb: 15 }} >LOGIN</Button>
                                 {
