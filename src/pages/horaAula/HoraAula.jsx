@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, DialogTitle, DialogContent, Dialog, DialogContentText, DialogActions, Snackbar, Alert, Autocomplete } from "@mui/material"
+import { Box, Container, Paper, Typography, TableCell, TableContainer, Table, TableHead, TableRow, TableBody, Button, TextField, DialogTitle, DialogContent, Dialog, DialogContentText, DialogActions, Snackbar, Alert, Autocomplete, Chip } from "@mui/material"
 import SidebarSee from "../../components/Sidebar/Sidebar"
 import * as React from 'react'
 import { orange } from "@mui/material/colors"
@@ -274,6 +274,7 @@ const HoraAula = () => {
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Mês</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Aulas</TableCell>
                                         <TableCell sx={{ color: 'white', fontSize: '15px' }}>Aula Extra</TableCell>
+                                        <TableCell sx={{ color: 'white', fontSize: '15px' }}>Total de aulas</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -286,6 +287,7 @@ const HoraAula = () => {
                                                     <TableCell>{item.instrutor}</TableCell>
                                                     <TableCell>{moment(item.data).format('DD/MM/YYYY')}</TableCell>
                                                     <TableCell>{moment(item.mes).format('MM/YYYY')}</TableCell>
+
                                                     <TableCell>
                                                         <QuantidadeHoraAula
                                                             item={item}
@@ -295,6 +297,11 @@ const HoraAula = () => {
                                                         <QuantidadeHoraAulaExtra
                                                             item={item}
                                                         />
+
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Chip label={parseInt(item.quantidadeAulas) + parseInt(item.quantidadeAulasExtra)} /> 
+
                                                     </TableCell>
                                                 </TableRow>
                                             )
