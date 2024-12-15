@@ -2,9 +2,9 @@ import { Alert, AlertTitle, Box, Button, CircularProgress, Container, IconButton
 import { orange } from "@mui/material/colors"
 import logo from '../../imgs/logo.png'
 import { useState } from "react"
-import { loginUser } from "../../_services/user.service"
-import axios from "axios"
+// import axios from "axios"
 import { RemoveRedEyeOutlined, Visibility, VisibilityOff, VisibilityOffOutlined } from "@mui/icons-material"
+import { loginUser } from "../../_services/user.service"
 
 const Login = () => {
 
