@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Box, Button, CircularProgress, Container, TextField 
 import { orange } from "@mui/material/colors"
 import logo from '../../imgs/logo.png'
 import { useState } from "react"
-import axios from "axios"
+import { loginUser } from "../../_services/user.service"
 
 const Login = () => {
 
@@ -15,7 +15,11 @@ const Login = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            const result = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, {
+            // const result = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, {
+            //     email,
+            //     password
+            // })
+            const result = await loginUser({
                 email,
                 password
             })
