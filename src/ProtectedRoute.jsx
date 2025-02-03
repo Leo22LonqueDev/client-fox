@@ -1,17 +1,16 @@
 import { useEffect, useContext } from "react"
 import AuthContext from "./context/AuthContext"
-import axios from "axios"
+// import { verificarToken } from "./_services/auth.service"
+import { verifyCode } from "./_services/user.service"
 
 const ProtectedRoute = ({ children }) => {
 
     const { name, setName } = useContext(AuthContext)
 
-    const verificarAcesso = async () => {
+    const verifyAcess = async () => {
         try {
-            const result = await axios.get(`${process.env.REACT_APP_BACKEND}/verifyAcesso`)
+            const result = await verifyCode()
             setName(result.nome)
-            // console.log(result.data);
-
         } 
         catch (error) {
             console.log(error)
@@ -20,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
     }
 
     useEffect(() => {
-        verificarAcesso()
+        verifyAcess()
     }, [name])
 
     return (

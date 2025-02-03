@@ -29,7 +29,7 @@ const EditarVeiculos = ({ id, modeloCarro, placaCarro, anoDeFabricacaoCarro, cor
                 setMessage("Este campo não pode ficar vazio, por favor insira os dados.")
                 return
             }
-            const update = await axios.put(`${process.env.REACT_APP_BACKEND}/veiculos/`, {
+            const update = await axios.put(`${process.env.REACT_APP_BACKEND_FOX}/veiculos/`, {
                 id, modelo, placa, anoDeFabricacao, cor, marca
 
             })

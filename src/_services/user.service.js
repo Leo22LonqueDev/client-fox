@@ -1,5 +1,4 @@
 import { ApiCall } from "./api"
-const uri = process.env.REACT_BACKEND_FOX
 
 export const createUser = async (data) => {
     return await new ApiCall('/users').post(data)
@@ -10,5 +9,13 @@ export const getUsers = async () => {
 }
 
 export const loginUser = async (body) => {
-    return await new ApiCall(`/login`).post(body)
+    return await new ApiCall(`/auth/login`).post(body)
+}
+
+export const updatePassword = async (data) => {
+    return await new ApiCall(`/users/updatePassword`).put(data)
+}
+
+export const verifyCode = async (data) => {
+    return await new ApiCall(`/auth/verify`).post(data)
 }

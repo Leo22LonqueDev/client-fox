@@ -1,8 +1,9 @@
 import axios from "axios";
+import { getCookie } from "react-use-cookie";
 
 export class ApiCall {
 
-    constructor(route, apiBaseUrl = process.env.REACT_APP_BACKEND, token = localStorage.getItem('token'), config = undefined) {
+    constructor(route, apiBaseUrl = process.env.REACT_APP_BACKEND_FOX, token = localStorage.getItem('token'), config = undefined) {
         this.base = apiBaseUrl;
         this.currentRoute = route;
         this.currentConfig = config;
@@ -30,7 +31,7 @@ export class ApiCall {
             const data = await this.blob().post(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err;
+            throw err;
         }
     }
 
@@ -39,7 +40,7 @@ export class ApiCall {
             const data = await this.caller().post(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -48,7 +49,7 @@ export class ApiCall {
             const data = await this.caller().patch(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -57,7 +58,7 @@ export class ApiCall {
             const data = await this.caller().put(this.currentRoute, obj, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 
@@ -79,7 +80,7 @@ export class ApiCall {
             const data = await this.caller().delete(this.currentRoute, this.currentConfig);
             return data.data;
         } catch (err) {
-            return err.response?.data;
+            throw err
         }
     }
 }
