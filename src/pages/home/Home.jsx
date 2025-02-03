@@ -3,7 +3,8 @@ import SidebarSee from "../../components/Sidebar/Sidebar"
 import { orange } from "@mui/material/colors"
 import AuthContext from "../../context/AuthContext"
 import { useContext, useEffect, useState } from "react"
-import axios from "axios"
+import { getUsers, updatePassword } from "../../_services/user.service"
+import Toast from "../../components/Toast/Toast"
 
 const Home = () => {
 
@@ -19,8 +20,8 @@ const Home = () => {
 
     const fetchInfoUser = async () => {
         try {
-            const result = await axios.get(`${process.env.REACT_APP_BACKEND}/users`)
-            setDataUser(result.data.users)
+            const result = await getUsers()
+            setDataUser(result.users)
             console.log(result);
             if (result.users === 'Sim') {
                 setFirstAccess(true)
@@ -34,14 +35,12 @@ const Home = () => {
         fetchInfoUser()
     }, [name])
 
-    const handlerUpdatePassword = async () => {
+    const handleUpdatePassword = async () => {
         try {
-            await axios.put(`${process.env.REACT_APP_BACKEND}/users/updatePassword`, {
-                password,
-                confirmPassword,
-            })
+            await updatePassword(password, confirmPassword)
             window.location.reload()
         } catch (error) {
+            setOpenSnack(true)
             setMessage(error.response.data.message)
             setSeveritySnack('error')
         }
@@ -65,7 +64,7 @@ const Home = () => {
                                 <form action=''>
                                     <TextField type='password' label='Senha' onChange={e => setPassword(e.target.value)} />
                                     <TextField type='password' label='Confirmar Senha' onChange={e => { setConfirmPassword(e.target.value) }} />
-                                    <Button onClick={handlerUpdatePassword}>Atualizar Senha</Button>
+                                    <Button onClick={handleUpdatePassword}>Atualizar Senha</Button>
                                 </form>
                             </Box>
                         ) : null
@@ -127,9 +126,8 @@ const Home = () => {
                     <Typography variant='h4'>
                         TESTE!
                     </Typography>
-
                 </Box>
-
+                <Toast message={message} open={openSnack} severity={severitySnack} onClose={() => {setOpenSnack(false)}} />
             </SidebarSee>
         </>
     )

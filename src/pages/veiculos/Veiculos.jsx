@@ -38,7 +38,7 @@ const Veiculos = () => {
                 setMessage('Dados faltando, favor inserir todos os campos!')
                 return
             }
-            const criarVeiculo = await axios.post(`${process.env.REACT_APP_BACKEND}/veiculos/createVeiculos`, {
+            const criarVeiculo = await axios.post(`${process.env.REACT_APP_BACKEND_FOX}/veiculos/createVeiculos`, {
                 modelo: modelo,
                 placa: placa,
                 anoDeFabricacao: anoDeFabricacao,
@@ -62,7 +62,7 @@ const Veiculos = () => {
     }
 
     const fetchData = async () => {
-        const result = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/getVeiculos`)
+        const result = await axios.get(`${process.env.REACT_APP_BACKEND_FOX}/veiculos/getVeiculos`)
         setCarro(result.data)
         console.log(result)
     }
@@ -71,7 +71,7 @@ const Veiculos = () => {
         try {
             event.preventDefault()
             if (modelo.length > 2) {
-                const filter = await axios.get(`${process.env.REACT_APP_BACKEND}/veiculos/filter?modelo=${modelo}`, {})
+                const filter = await axios.get(`${process.env.REACT_APP_BACKEND_FOX}/veiculos/filter?modelo=${modelo}`, {})
                 console.log(filter.data)
                 setCarro(filter.data.filter)
             }

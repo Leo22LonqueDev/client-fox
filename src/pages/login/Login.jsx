@@ -1,10 +1,11 @@
 import { Alert, AlertTitle, Box, Button, CircularProgress, Container, IconButton, InputAdornment, TextField, Tooltip } from "@mui/material"
 import { orange } from "@mui/material/colors"
 import logo from '../../imgs/logo.png'
-import { useState } from "react"
-// import axios from "axios"
-import { RemoveRedEyeOutlined, Visibility, VisibilityOff, VisibilityOffOutlined } from "@mui/icons-material"
-import { loginUser } from "../../_services/user.service"
+import { useContext, useState } from "react"
+import { RemoveRedEyeOutlined, VisibilityOffOutlined } from "@mui/icons-material"
+import { loginUser, verifyCode } from "../../_services/user.service"
+// import { iniciarPadrao } from "../../_services/auth.service"
+import AuthContext from "../../context/AuthContext"
 
 const Login = () => {
 
@@ -14,6 +15,8 @@ const Login = () => {
     const [seeSenha, setSeeSenha] = useState(false);
     const [changeVisualizarSenha, setChangeVisualizarSenha] = useState('password');
     const [error, setError] = useState(false)
+    
+    const { setAuthToken } = useContext(AuthContext);
 
     const handleToggleSenhaVisibility = () => {
         setSeeSenha(!seeSenha);
@@ -24,19 +27,16 @@ const Login = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            // const result = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, {
-            //     email,
-            //     password
-            // })
             const result = await loginUser({
                 email,
                 password
             })
             console.log(result);
             if (result.status === 200) {
-                const values = result.data
-                localStorage.setItem('values', values)
-
+                const authToken = result.token;
+                localStorage.setItem('token', authToken);
+                setAuthToken(authToken);
+                await verifyCode({email: result.email})
                 window.location.replace('/')
             }
         } catch (error) {
