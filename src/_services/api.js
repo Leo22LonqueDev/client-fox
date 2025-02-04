@@ -1,6 +1,4 @@
 import axios from "axios";
-import { getCookie } from "react-use-cookie";
-
 export class ApiCall {
 
     constructor(route, apiBaseUrl = process.env.REACT_APP_BACKEND_FOX, token = localStorage.getItem('token'), config = undefined) {

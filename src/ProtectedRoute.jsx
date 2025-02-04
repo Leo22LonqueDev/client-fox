@@ -1,13 +1,12 @@
 import { useEffect, useContext } from "react"
 import AuthContext from "./context/AuthContext"
-// import { verificarToken } from "./_services/auth.service"
 import { verifyCode } from "./_services/user.service"
 
 const ProtectedRoute = ({ children }) => {
 
     const { name, setName } = useContext(AuthContext)
 
-    const verifyAcess = async () => {
+    const verifyAccess = async () => {
         try {
             const result = await verifyCode()
             setName(result.nome)
@@ -19,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
     }
 
     useEffect(() => {
-        verifyAcess()
+        verifyAccess()
     }, [name])
 
     return (

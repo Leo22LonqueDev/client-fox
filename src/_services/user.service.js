@@ -12,6 +12,10 @@ export const loginUser = async (body) => {
     return await new ApiCall(`/auth/login`).post(body)
 }
 
+export const logoutUser = async () => {
+    return await new ApiCall(`/auth/logout`).post()
+}
+
 export const updatePassword = async (data) => {
     return await new ApiCall(`/users/updatePassword`).put(data)
 }

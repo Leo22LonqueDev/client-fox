@@ -1,14 +1,11 @@
 import { Avatar, IconButton, Menu, Tooltip, MenuItem, ListItemIcon } from "@mui/material";
-// import { useContext } from "react";
 import { useState } from "react";
-// import AuthContext from "../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
-import Axios from 'axios'
+import { logoutUser } from "../../_services/user.service";
 
 const ProfileMenu = () => {
 
-    // const { name } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -23,9 +20,17 @@ const ProfileMenu = () => {
     };
 
     const logout = async () => {
-        const result = await Axios.post(`${process.env.REACT_APP_BACKEND}/logout`, {}, { withCredentials: true })
+        const result = await logoutUser()
         localStorage.clear();
 
+        var cookies = document.cookie.split(";");
+
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
         if (result.status === 200) {
             navigate('/login')
         }
